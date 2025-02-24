@@ -1,5 +1,51 @@
 REQUISITOS FUNCIONAIS:
+  Cadastro e Login de Usuários
+    Permitir cadastro via e-mail e senha.
+    Implementar login com autenticação JWT.
+ 
+  Gerenciamento de Receitas
+    Criar, editar e excluir receitas.
+    Permitir que o usuário adicione ingredientes, modo de preparo e tempo de preparo.
+  
+  Busca e Filtragem de Receitas
+    Buscar receitas por nome.
+    Filtrar por categorias (ex.: sobremesas, massas, carnes).
+    Filtrar por nível de dificuldade.
+  
+  Favoritos e Lista de Receitas Salvas
+    Permitir que os usuários salvem receitas em sua conta.
+    Criar uma seção "Minhas Receitas Favoritas".
 
+  Compartilhamento de Receitas
+    Possibilitar compartilhamento via link.
 
+  Sistema de Categorias e Tags
+    Cada receita pode ter múltiplas categorias e tags personalizadas.
+
+  Gerenciamento de Usuários (Admin)
+    Administradores podem remover receitas ofensivas ou inadequadas.
 
 REQUISITOS NÃO FUNCIONAIS:
+
+  Desempenho
+    O tempo de resposta para buscar uma receita deve ser menor que 2 segundos.
+
+  Segurança
+    Proteção contra ataques de injeção SQL e XSS.
+    Implementação de políticas de autenticação segura via JWT.
+
+  Escalabilidade
+    O banco de dados PostgreSQL deve ser otimizado para consultas rápidas.
+    A arquitetura deve permitir escalabilidade horizontal caso necessário.
+
+  Experiência do Usuário (UX/UI)
+    Interface responsiva para mobile e desktop.
+    Layout intuitivo e de fácil navegação.
+
+  Compatibilidade
+    Suporte para os navegadores mais populares (Chrome, Firefox, Edge, Safari).
+    Testado em diferentes resoluções de tela.
+
+  Manutenibilidade
+    Código bem documentado e modular.
+    Uso de boas práticas no desenvolvimento para facilitar futuras melhorias.
