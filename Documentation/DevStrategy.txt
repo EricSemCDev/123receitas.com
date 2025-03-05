@@ -1,0 +1,19 @@
+  O desenvolvimento do 123Receitas.com segue uma abordagem modular, na qual os requisitos são divididos em módulos independentes,
+permitindo um fluxo de trabalho organizado e a implementação progressiva das funcionalidades. Essa estratégia facilita a manutenção e a 
+escalabilidade do projeto sem comprometer a coesão do sistema.
+
+  A arquitetura adotada para a aplicação é monolítica, proporcionando um ambiente mais integrado e simplificado para o gerenciamento das funcionalidades.
+Essa escolha se justifica pela menor complexidade inicial em comparação com arquiteturas distribuídas, além de facilitar o desenvolvimento, a depuração
+e a implantação do sistema em um único ambiente.
+
+  No Back-End, foi escolhido o Sails.js, um framework para Node.js que oferece uma estrutura flexível baseada no padrão MVC (Model-View-Controller).
+Sua capacidade de geração automática de APIs, integração com bancos de dados e suporte nativo para WebSockets tornam-no uma opção eficiente para o
+desenvolvimento rápido e escalável.
+
+  No Front-End, a aplicação utiliza React.js, um dos frameworks mais populares para desenvolvimento de interfaces dinâmicas e reativas.
+Sua estrutura baseada em componentes facilita a reutilização de código, melhorando a organização do projeto. O design da interface é estilizado
+com TailwindCSS, um framework CSS utilitário que permite a criação de layouts responsivos e personalizáveis de forma rápida e eficiente.
+
+  O banco de dados escolhido para armazenar as informações das receitas é o PostgreSQL, um sistema robusto e confiável que oferece suporte a transações
+complexas, alto desempenho e escalabilidade. Sua compatibilidade com Sails.js e a capacidade de lidar com grandes volumes de dados tornam-no ideal para
+a aplicação.
