@@ -7,7 +7,7 @@
 ---
 
 ## 📌 Escopo do projeto:
-  O 123receitas.com é um site voltado para os amantes da culinária. A proposta principal da aplicação web é ser uma plataforma simples e um grande banco de dados para aqueles que adoram fazer algo diferente no almoço de família no final de semana, ou para os necessitados por um prato capaz de impressionar o par romântico, o 123receitas tem como intuito abranger todas essas situações e servir de inspiração e como uma central de compartilhamento de boas experiências através da culinária.
+  O 123Receitas.com é uma plataforma web desenvolvida para reunir e organizar um extenso banco de dados de receitas culinárias. Com uma interface intuitiva e de fácil navegação, a aplicação permite que os usuários busquem, compartilhem e salvem receitas para diferentes ocasiões. As receitas podem ser filtradas por nome, nível de dificuldade e categoria, como sobremesas, massas e carnes, facilitando a busca conforme a necessidade do usuário. Além disso, o 123Receitas.com conta com um espaço para avaliações e comentários, permitindo a troca de experiências entre os usuários.
 
 ## 🚀 Tecnologias que serão utilizadas no projeto:
 
@@ -23,8 +23,7 @@
   - [PostgreSQL](https://www.postgresql.org/) 
 
 ## 📌 Project Scope  
-123receitas.com is a website designed for cooking enthusiasts. The main goal of the web application is to be a simple platform and a large database for those who love trying something different for a family lunch on the weekend or need a dish that can impress their romantic partner.  
-123receitas aims to cover all these situations, serving as both inspiration and a central hub for sharing great culinary experiences.  
+123Receitas.com is a web platform designed to compile and organize a vast database of culinary recipes. With an intuitive and user-friendly interface, the application allows users to search, share, and save recipes for various occasions. Recipes can be filtered by name, difficulty level, and category, such as desserts, pasta, and meats, making it easier to find the right dish. Additionally, 123Receitas.com features a section for reviews and comments, enabling users to exchange experiences and feedback.
 
 ## 🚀 Technologies Used  
 
