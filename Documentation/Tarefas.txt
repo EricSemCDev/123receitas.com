@@ -1,5 +1,7 @@
 Módulos de Desenvolvimento da Aplicação 123receitas.com
 
+O desenvolvimento será feito de forma modular, cobrindo os requisitos de forma organizada e atendendo a um por vez, a dupla trabalhará em conjunto em cada um dos módulos, se dividindo somente em casos de extrema necessidade, mas entre aspectos de Front-End, Back-End ou DataBase, mas nunca se separando em relação ao módulo trabalhado.
+
 1️) Módulo de Autenticação e Usuários
   Objetivo: Implementar login, cadastro e gerenciamento de usuários.
 
