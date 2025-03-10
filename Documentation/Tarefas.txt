@@ -4,6 +4,8 @@ O desenvolvimento será feito de forma modular, cobrindo os requisitos de forma 
 dos módulos, se dividindo somente em casos de extrema necessidade, mas entre aspectos de Front-End, Back-End ou DataBase, mas nunca se separando em relação
 ao módulo trabalhado.
 
+https://trello.com/b/Wcb7r5JJ/aplicacao-123receitascom
+
 1️) Módulo de Autenticação e Usuários
   Objetivo: Implementar login, cadastro e gerenciamento de usuários.
 
