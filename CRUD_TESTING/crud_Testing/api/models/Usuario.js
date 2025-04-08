@@ -33,6 +33,12 @@ module.exports = {
       type: 'ref', 
       columnType: 'timestamp without time zone',
       autoUpdatedAt: true 
+    },
+    senha: {
+      type: 'string',
+      required: true,
+      protect: true,
+      columnType: 'character varying(255)'
     }
   },
 

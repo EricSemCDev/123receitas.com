@@ -1,9 +1,19 @@
+const bcrypt = require('bcrypt')
+
 module.exports = {
     // Criar um novo usuário
     create: async function (req, res) {
       try {
+        if(!req.body.senha) {
+          return res.status(400).json({ erro: 'Senha Obrigatória'})
+        }
+        const saltRounds = 10
+        const hashPW = await bcrypt.hash(req.body.senha, saltRounds)
+        req.body.senha = hashPW
+
         const novoUsuario = await Usuario.create(req.body).fetch();
-        return res.status(201).json(novoUsuario);
+        const { senha, ...usuarioSemSenha } = novoUsuario;
+        return res.status(201).json(usuarioSemSenha);
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao criar usuário', detalhes: error.message });
       }
@@ -13,7 +23,8 @@ module.exports = {
     findAll: async function (req, res) {
       try {
         const usuarios = await Usuario.find();
-        return res.json(usuarios);
+        const usuariosSemSenha = usuarios.map(({ senha, ...resto }) => resto);
+        return res.json(usuariosSemSenha);
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao buscar usuários', detalhes: error.message });
       }
@@ -26,7 +37,8 @@ module.exports = {
         if (!usuario) {
           return res.status(404).json({ erro: 'Usuário não encontrado' });
         }
-        return res.json(usuario);
+        const { senha, ...usuarioSemSenha } = usuario;
+        return res.json(usuarioSemSenha);
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao buscar usuário', detalhes: error.message });
       }
