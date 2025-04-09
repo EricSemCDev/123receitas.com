@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt')
 
+console.log("TESTE DE LOG - ao carregar o controller");
+
 module.exports = {
     // Criar um novo usuário
     create: async function (req, res) {
@@ -23,9 +25,16 @@ module.exports = {
     findAll: async function (req, res) {
       try {
         const usuarios = await Usuario.find();
-        const usuariosSemSenha = usuarios.map(({ senha, ...resto }) => resto);
+
+        console.log('Usuarios: ', usuarios)
+
+        const usuariosSemSenha = usuarios.map(usuario => {
+          const { senha, ...restante } = usuario;
+          return restante;
+        });
         return res.json(usuariosSemSenha);
       } catch (error) {
+        console.error("Erro ao buscar usuários: ", error);
         return res.status(500).json({ erro: 'Erro ao buscar usuários', detalhes: error.message });
       }
     },
@@ -47,11 +56,17 @@ module.exports = {
     // Atualizar um usuário por ID
     update: async function (req, res) {
       try {
+        if (req.body.senha) {
+          const bcrypt = require('bcrypt');
+          const saltRounds = 10;
+          req.body.senha = await bcrypt.hash(req.body.senha, saltRounds);
+        }
         const usuarioAtualizado = await Usuario.updateOne({ id: req.params.id }).set(req.body);
-        if (!usuarioAtualizado) {
+        const { senha, ...usuarioAttSemSenha } = usuarioAtualizado;
+        if (!usuarioAttSemSenha) {
           return res.status(404).json({ erro: 'Usuário não encontrado' });
         }
-        return res.json(usuarioAtualizado);
+        return res.json(usuarioAttSemSenha);
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao atualizar usuário', detalhes: error.message });
       }
