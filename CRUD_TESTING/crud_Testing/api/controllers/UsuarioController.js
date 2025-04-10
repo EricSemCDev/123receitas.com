@@ -1,4 +1,5 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const User_Foto = require('../models/User_Foto');
 
 console.log("TESTE DE LOG - ao carregar o controller");
 
@@ -14,6 +15,15 @@ module.exports = {
         req.body.senha = hashPW
 
         const novoUsuario = await Usuario.create(req.body).fetch();
+
+        if (req.body.user_foto) {
+          const bufferFoto = Buffer.from(req.body.user_foto, 'base64');
+          await User_Foto.create({
+            id: novoUsuario.id,
+            user_foto: bufferFoto
+          });
+        }
+
         const { senha, ...usuarioSemSenha } = novoUsuario;
         return res.status(201).json(usuarioSemSenha);
       } catch (error) {
