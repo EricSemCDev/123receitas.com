@@ -21,4 +21,15 @@ module.exports.routes = {
   'PUT /receita_foto/:id': 'ReceitaFotoController.update',
   'GET /receita_foto/:id': 'ReceitaFotoController.findAll',
 
+  //Rotas Tabela Categoria
+  'POST /categoria': 'CategoriaController.create',
+  'GET /categoria': 'CategoriaController.findAll',
+  'GET /categoria/:id': 'CategoriaController.findOne',
+  'PUT /categoria/:id': 'CategoriaController.update',
+  'DELETE /categoria/:id': 'CategoriaController.delete',
+
+  //Rotas Tabela ReceitaCategorias
+  'POST /receita-categorias': 'ReceitaCategoriasController.create',
+  'GET /receita-categorias': 'ReceitaCategoriasController.findAll',
+  'DELETE /receita-categorias/:id': 'ReceitaCategoriasController.delete',
 };

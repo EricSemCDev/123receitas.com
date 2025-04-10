@@ -1,18 +1,39 @@
-/**
- * ReceitaController.js
- */
-
 module.exports = {
     // Criar uma nova receita
     create: async function (req, res) {
-      try {
-        const novaReceita = await Receita.create(req.body).fetch();
-        return res.status(201).json(novaReceita);
-      } catch (error) {
-        return res.status(500).json({ erro: 'Erro ao criar receita', detalhes: error.message });
-      }
-    },
-  
+        try {
+          // Criação da receita
+          const novaReceita = await Receita.create(req.body).fetch();
+      
+          // Verifica se vieram fotos (array de base64)
+          if (req.body.fotos && Array.isArray(req.body.fotos)) {
+            const fotosBuffer = req.body.fotos.map(base64 => {
+              return {
+                receita: novaReceita.id,
+                receita_foto: Buffer.from(base64, 'base64')
+              };
+            });
+      
+            await Receita_Foto.createEach(fotosBuffer);
+          }
+          
+          // Verifica se vieram categorias (array de ids)
+          if (req.body.categorias && Array.isArray(req.body.categorias)) {
+            const categoriasAssociadas = req.body.categorias.map(categoriaId => {
+              return {
+                receita: novaReceita.id,
+                categoria: categoriaId
+              };
+            });
+      
+            await ReceitaCategorias.createEach(categoriasAssociadas);
+          }
+      
+          return res.status(201).json(novaReceita);
+        } catch (error) {
+          return res.status(500).json({ erro: 'Erro ao criar receita', detalhes: error.message });
+        }
+    },      
     // Buscar todas as receitas
     findAll: async function (req, res) {
       try {
@@ -22,7 +43,6 @@ module.exports = {
         return res.status(500).json({ erro: 'Erro ao buscar receitas', detalhes: error.message });
       }
     },
-  
     // Buscar uma receita específica pelo ID
     findOne: async function (req, res) {
       try {
@@ -35,7 +55,6 @@ module.exports = {
         return res.status(500).json({ erro: 'Erro ao buscar receita', detalhes: error.message });
       }
     },
-  
     // Atualizar uma receita
     update: async function (req, res) {
       try {
@@ -48,7 +67,6 @@ module.exports = {
         return res.status(500).json({ erro: 'Erro ao atualizar receita', detalhes: error.message });
       }
     },
-  
     // Deletar uma receita
     delete: async function (req, res) {
       try {

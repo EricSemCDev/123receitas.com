@@ -58,10 +58,22 @@ module.exports = {
       columnName: 'id_criador',
       required: true
     },
-    //Habilita '.populate' com 'receita_foto'
-    //const receitaComFotos = await Receita.findOne({ id: 1 }).populate('fotos'); -- Comando exemplo
+
+    //Habilita '.populate'
+    //const receitaComFotos = await Receita.findOne({ id: 1 }).populate('fotos'); -- Comando exemplo para populate individual
+    //===========================================================
+    //=========== COMANDO EXEMPLO PARA POPULATE DUPLO ===========
+    //===========================================================
+    //const receita = await Receita.findOne({ id: req.params.id })
+    //.populate('categorias')
+    //.populate('fotos');
+    //===========================================================
     fotos: {
       collection: 'receita_foto',
+      via: 'receita'
+    },
+    categorias: {
+      collection: 'receitacategorias',
       via: 'receita'
     }    
   },
