@@ -17,11 +17,15 @@ module.exports = {
         const novoUsuario = await Usuario.create(req.body).fetch();
 
         if (req.body.user_foto) {
-          const bufferFoto = Buffer.from(req.body.user_foto, 'base64');
-          await User_Foto.create({
-            id: novoUsuario.id,
-            user_foto: bufferFoto
-          });
+          try {
+            const bufferFoto = Buffer.from(req.body.user_foto, 'base64');
+            await User_Foto.create({
+              id: novoUsuario.id,
+              user_foto: bufferFoto
+            });
+          } catch (e) {
+            return res.status(400).json({ erro: 'Erro ao processar a imagem enviada.' });
+          }
         }
 
         const { senha, ...usuarioSemSenha } = novoUsuario;

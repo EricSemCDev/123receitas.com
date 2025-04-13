@@ -69,11 +69,11 @@ module.exports = {
     //.populate('fotos');
     //===========================================================
     fotos: {
-      collection: 'receita_foto',
+      collection: 'ReceitaFoto',
       via: 'receita'
     },
     categorias: {
-      collection: 'receitacategorias',
+      collection: 'ReceitaCategorias',
       via: 'receita'
     }    
   },
