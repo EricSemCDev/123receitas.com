@@ -1,14 +1,21 @@
+/* Dependencias */
 import { useState, useEffect } from "react";
+
+/* Icons */
 import { BsChevronCompactDown } from "react-icons/bs";
 
 export default function Header({ onScrollClick }) {
-  const fullText = "Encontre a Receita perfeita, na Hora perfeita, com os Ingredientes perfeitos e na Dificuldade perfeita.";
+  /* Variaveis da pagina */
+  const Subtitulo = "  Encontre a Receita perfeita, na Hora perfeita, com os Ingredientes perfeitos e na Dificuldade perfeita.";
 
+  /* Variaveis da Efeito de Digitação */
+  
   const [displayText, setDisplayText] = useState("");
   const [index, setIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showCursor, setShowCursor] = useState(true);
 
+  /* Efeito de Digitar e Apagar */
   useEffect(() => {
     const typingSpeed = 50;  // Velocidade da digitação (ms)
     const deletingSpeed = 50;  // Velocidade de apagar (ms)
@@ -24,9 +31,9 @@ export default function Header({ onScrollClick }) {
         setIndex(0);
       }
     } else {
-      if (index < fullText.length) {
+      if (index < Subtitulo.length) {
         setTimeout(() => {
-          setDisplayText((prev) => prev + fullText.charAt(index));
+          setDisplayText((prev) => prev + Subtitulo.charAt(index));
           setIndex((prev) => prev + 1);
         }, typingSpeed);
       } else {
@@ -46,31 +53,19 @@ export default function Header({ onScrollClick }) {
 
   return (
     <header className="bg-orange-50 pt-16 px-8">
-      <div className="flex items-center justify-between mx-4 md:mx-8 lg:mx-16 xl:mx-32">
-        {/* Texto */}
-        <div className="max-w-lg">
-          <h2 className="text-5xl font-extrabold bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent leading-tight">
-            Aprenda. Cozinhe. <br />
-            Compartilhe. <br />
-            Cozinhar se torna fácil.
-          </h2>
 
-          {/* Texto animado */}
-          <p
-            className="mt-4 text-lg text-gray-700 font-light italic w-2/3 min-h-[6rem] leading-relaxed"
-            dangerouslySetInnerHTML={{
-              __html: getStyledText(displayText), // Usando dangerouslySetInnerHTML para renderizar HTML
-            }}
-          />
+      <div className="flex items-center justify-between mx-4 md:mx-8 lg:mx-16 xl:mx-32">
+        {/* Apresentação */}
+        <div className="max-w-lg">
+          {/* Titulo */}
+          <h2 className="text-5xl font-extrabold bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent leading-tight">Aprenda. Cozinhe.<br/>Compartilhe.<br/>Cozinhar se torna fácil.</h2>
+          {/* Subtitulo */}
+          <p className="mt-4 text-lg text-gray-700 font-light italic w-2/3 min-h-[6rem] leading-relaxed" dangerouslySetInnerHTML={{__html: getStyledText(displayText),}}/>
         </div>
 
         {/* Imagem */}
         <div className="relative">
-          <img
-            src="./src/assets/salada.png"
-            alt="Salada"
-            className="w-136 rounded-full"
-          />
+          <img src="./src/assets/salada.png" alt="Salada" className="w-136 rounded-full"/>
         </div>
       </div>
 
@@ -78,6 +73,7 @@ export default function Header({ onScrollClick }) {
       <div className="flex items-center justify-center " onClick={onScrollClick}>
         <BsChevronCompactDown className="cursor-pointer text-6xl text-gray-600 animate-bounce transition-all duration-300 ease-in-out transform hover:scale-110 hover:text-[#00000]" />
       </div>
+      
     </header>
   );
 }
