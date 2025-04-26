@@ -1,10 +1,17 @@
+/* Dependencias */
+import { useLocation } from "react-router-dom";
+
 /* Componentes */
 import Carrosel from "../ReceitaDescComponents/Carrosel";
 import Caracteristicas from "./Caracteristicas";
 import Ingredientes from "./ingredientes";
 import ModoPreparo from "./modo-preparo";
 
-export default function Desc() {
+export default function Desc() {    
+    /* Variaveis da Pagina */
+    const location = useLocation();
+    const receita = location.state?.receita;
+
     return (
      <section className="w-screen">
         <div className="h-150 flex items-center mx-4 md:mx-8 lg:mx-16 xl:mx-32">
@@ -18,7 +25,7 @@ export default function Desc() {
 
                 <div className="flex justify-center items-center w-full">
                     {/* Titulo */}
-                    <p className="font-bold text-6xl bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent">Bolo de Caneca</p>
+                    <p className="font-bold text-6xl bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent">{receita.titulo}</p>
                 </div>
 
                 {/* Informaçoes da Receita */}

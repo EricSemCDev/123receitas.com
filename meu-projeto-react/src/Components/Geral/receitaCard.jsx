@@ -10,7 +10,7 @@ export default function receitaCard({ receita }) {
     const RotaReceitaDesc = "/ReceitaDesc"
 
   return (
-    <Link to={RotaReceitaDesc} state={{ id: receita?.id || "0" }} className="w-64 h-64 bg-gray-200 flex flex-col rounded-xl shadow-[0px_2px_5px_rgba(0,0,0,0.5)] transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-[0px_5px_10px_rgba(0,0,0,0.5)]">
+    <Link to={RotaReceitaDesc} state={{ receita: receita || "0" }} className="w-64 h-64 bg-gray-200 flex flex-col rounded-xl shadow-[0px_2px_5px_rgba(0,0,0,0.5)] transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-[0px_5px_10px_rgba(0,0,0,0.5)]">
         
         {/* Imagem da receita */}
         <div className="w-full h-1/2">
