@@ -1,5 +1,5 @@
 module.exports = {
-  tableName: 'user_foto',
+  tableName: 'User_foto',
   primaryKey: 'id',
 
   attributes: {
@@ -10,10 +10,9 @@ module.exports = {
     },
     usuario: {
       model: 'usuario',
-      columnName: 'usuario',
       required: true
     },
-    foto_usuario: {
+    user_foto: {
       type: 'ref',
       columnType: 'bytea'
     },

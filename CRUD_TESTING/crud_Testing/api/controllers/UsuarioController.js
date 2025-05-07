@@ -20,7 +20,7 @@ module.exports = {
           try {
             const bufferFoto = Buffer.from(req.body.user_foto, 'base64');
             await User_Foto.create({
-              id: novoUsuario.id,
+              usuario: novoUsuario.id,
               user_foto: bufferFoto
             });
           } catch (e) {
