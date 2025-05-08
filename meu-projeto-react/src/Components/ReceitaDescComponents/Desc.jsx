@@ -1,4 +1,4 @@
-/* Dependencias */
+/* Dependências */
 import { useLocation } from "react-router-dom";
 
 /* Componentes */
@@ -7,13 +7,13 @@ import Caracteristicas from "./Caracteristicas";
 import Ingredientes from "./ingredientes";
 import ModoPreparo from "./modo-preparo";
 
-export default function Desc() {    
+export default function Desc() {
     /* Variaveis da Pagina */
     const location = useLocation();
     const receita = location.state?.receita;
 
     return (
-     <section className="w-screen">
+     <section className="">
         <div className="h-150 flex items-center mx-4 md:mx-8 lg:mx-16 xl:mx-32">
 
             {/* Carrosel */}
@@ -30,6 +30,7 @@ export default function Desc() {
 
                 {/* Informaçoes da Receita */}
                 <div className="flex w-full space-x-4">
+                    
                     <div className="flex flex-col w-1/2 space-y-4">
                         {/* Caracteristicas */}
                         <div className=""><Caracteristicas/></div>
@@ -42,8 +43,10 @@ export default function Desc() {
                     <div className="w-1/2">
                         <ModoPreparo />
                     </div>
+
                 </div>
             </div>
+
         </div>
      </section>
     );

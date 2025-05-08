@@ -3,23 +3,28 @@ import { useState, useEffect } from "react";
 
 /* Componentes */
 import ReceitaCard from "../Geral/receitaCard";
+import modoPreparo from "../ReceitaDescComponents/modo-preparo";
 
 export default function ReceitasPopulares() {
     /* Variaveis da pagina */
     const retornoBancoReceitas = [
-        { id: 1, tituloReceita: "Butter Chicken", imagemReceita: "./src/assets/image.png", dificuldadeReceita: "2.5", TempoPreparoReceita: "10", ImagemAutor: "./src/assets/linda.png"},
-        { id: 2, tituloReceita: "Brigadeiro", imagemReceita: "brigadeiro.jpg", dificuldadeReceita: "1.0", TempoPreparoReceita: "15", ImagemAutor: "bolo.jpg"},
-        { id: 3, tituloReceita: "Torta de Frango", imagemReceita: "torta.jpg", dificuldadeReceita: "3.5", TempoPreparoReceita: "45", ImagemAutor: "bolo.jpg"},
-    ]; // Aqui entra o fetch real depois
+      { id: 1, tituloReceita: "Butter Chicken", imagemReceita: "./src/assets/image.png", dificuldadeReceita: 5, TempoPreparoReceita: "10", ImagemAutor: "./src/assets/linda.png", Categorias: ["Salgados", "Bebidas"], Porcoes: 1, Ingredientes: "1 ovo;4 colheres de sopa de óleo;7 colheres de sopa de farinha de trigo;3 colheres de sopa de leite;5 colheres de sopa de açúcar;1 colher de sopa de fermento em pó", ModoPreparo: "Em uma tigela coloque todos os ingredientes e misture bem.;Distribua a massa em duas canecas já untadas e leve para a Air Fryer Mondial em 180º por 10 a 15 minutos.;Retire da Air Fryer com cuidado e incremente com a cobertura que você preferir, com doces, pasta de amendoim, geleias, caldas, castanhas e o que mais você desejar."},
+      { id: 2, tituloReceita: "Brigadeiro", imagemReceita: "brigadeiro.jpg", dificuldadeReceita: 2, TempoPreparoReceita: "15", ImagemAutor: "bolo.jpg", Categorias: ["Doces"], Porcoes: 1, Ingredientes: "1 ovo;4 colheres de sopa de óleo;7 colheres de sopa de farinha de trigo;3 colheres de sopa de leite;5 colheres de sopa de açúcar;1 colher de sopa de fermento em pó", ModoPreparo: "Em uma tigela coloque todos os ingredientes e misture bem.;Distribua a massa em duas canecas já untadas e leve para a Air Fryer Mondial em 180º por 10 a 15 minutos.;Retire da Air Fryer com cuidado e incremente com a cobertura que você preferir, com doces, pasta de amendoim, geleias, caldas, castanhas e o que mais você desejar."},
+      { id: 3, tituloReceita: "Torta de Frango", imagemReceita: "torta.jpg", dificuldadeReceita: 7, TempoPreparoReceita: "45", ImagemAutor: "bolo.jpg", Categorias: ["Salgados"], Porcoes: 1, Ingredientes: "1 ovo;4 colheres de sopa de óleo;7 colheres de sopa de farinha de trigo;3 colheres de sopa de leite;5 colheres de sopa de açúcar;1 colher de sopa de fermento em pó", ModoPreparo: "Em uma tigela coloque todos os ingredientes e misture bem.;Distribua a massa em duas canecas já untadas e leve para a Air Fryer Mondial em 180º por 10 a 15 minutos.;Retire da Air Fryer com cuidado e incremente com a cobertura que você preferir, com doces, pasta de amendoim, geleias, caldas, castanhas e o que mais você desejar."},
+  ]; // Aqui entra o fetch real depois
 
-    const Receitas = retornoBancoReceitas.map((item) => ({
-        id: item.id, // "ID" Retornado pelo banco
-        titulo: item.tituloReceita, // "Nome Da Receita" Retornado pelo banco
-        imagemR: item.imagemReceita, // "Imagem da Receita" Retornado pelo banco
-        dificuldade: item.dificuldadeReceita, // "Dificuldade" Retornada pelo banco
-        TempoPreparo: item.TempoPreparoReceita + "min", // "Tempo De Preparo" Retornado pelo banco
-        ImagemA: item.ImagemAutor // "Imagem do Autor" Retornado pelo banco
-    }));
+  const Receitas = retornoBancoReceitas.map((item) => ({
+      id: item.id, // "ID" Retornado pelo banco
+      titulo: item.tituloReceita, // "Nome Da Receita" Retornado pelo banco
+      imagemR: item.imagemReceita, // "Imagem da Receita" Retornado pelo banco
+      dificuldade: item.dificuldadeReceita, // "Dificuldade" Retornada pelo banco
+      TempoPreparo: parseInt(item.TempoPreparoReceita), // "Tempo De Preparo" Retornado pelo banco
+      ImagemA: item.ImagemAutor, // "Imagem do Autor" Retornado pelo banco
+      categorias: item.Categorias, // "Categorias" Retornadas pelo banco
+      porcao: item.Porcoes, // "Porçoes" Retornadas pelo banco
+      ingredientes: item.Ingredientes, // "ingredientes" Retornados pelo banco
+      modoPreparo: item.ModoPreparo, // "Modo de Preparo" Retornado pelo banco
+  }));
 
     /* Logica de repetição para validar o card */
     const [receitas, setReceitas] = useState([]);

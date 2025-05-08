@@ -10,8 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@material-tailwind/react": "^3.0.0-beta.24",
     "@tailwindcss/vite": "^4.0.15",
-    "framer-motion": "^12.5.0",
+    "framer-motion": "^12.10.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",

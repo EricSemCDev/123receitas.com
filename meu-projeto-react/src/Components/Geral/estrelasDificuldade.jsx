@@ -1,24 +1,19 @@
-import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 
-export default function EstrelasDificuldade({ level }) {
-  const renderStars = () => {
-    let stars = [];
-    for (let i = 1; i <= 5; i++) {
-      const value = i * 2;
-      stars.push(
-        <div key={i} className="w-5 h-5 flex justify-center items-center">
-          {level >= value ? (
-            <FaStar className="text-[#FF7B00] text-sm" />
-          ) : level === value - 1 ? (
-            <FaStarHalfAlt className="text-[#FF7B00] text-sm" />
-          ) : (
-            <FaRegStar className="text-[#FF7B00] text-sm" />
-          )}
-        </div>
-      );
+export default function EstrelasDificuldade({ level, hover = false }) {
+  const stars = [];
+
+  for (let i = 1; i <= 5; i++) {
+    const color = hover ? "group-hover:text-white" : "text-[#FF7B00]";
+
+    if (level >= i * 2) {
+      stars.push(<FaStar key={i} className={`${color}`} />);
+    } else if (level === i * 2 - 1) {
+      stars.push(<FaStarHalfAlt key={i} className={`${color}`} />);
+    } else {
+      stars.push(<FaRegStar key={i} className={`${color}`} />);
     }
-    return stars;
-  };
+  }
 
-  return <div className="flex space-x-1">{renderStars()}</div>;
+  return <div className="flex space-x-1">{stars}</div>;
 }

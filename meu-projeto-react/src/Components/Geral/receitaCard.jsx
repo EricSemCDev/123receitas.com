@@ -28,13 +28,13 @@ export default function receitaCard({ receita }) {
                 {/* Dificuldade */}
                 <div className="bg-gradient-to-r from-[#FF7B00] to-[#FF3700] font-semibold text-xs w-16 h-5 flex items-center justify-center space-x-2 rounded-xl border-1 border-[#c9c9c9]">
                     <PiForkKnifeFill className="text-white" />
-                    <p className="text-white">{receita?.dificuldade || "0.0"}</p>
+                    <p className="text-white">{(receita?.dificuldade/2).toFixed(1) || "0.0"}</p>
                 </div>
 
                 {/* Tempo de Preparo */}
                 <div className="bg-gradient-to-r from-[#FF7B00] to-[#FF3700] font-semibold text-xs w-19 h-5 flex items-center justify-center space-x-2 rounded-xl border-1 border-[#c9c9c9]">
                     <BsAlarmFill className="text-white" />
-                    <p className="text-white">{receita?.TempoPreparo || "0min"}</p>
+                    <p className="text-white">{receita?.TempoPreparo + "min" || "0min"}</p>
                 </div>
 
                 {/* Imagem do autor */}

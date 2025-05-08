@@ -1,8 +1,11 @@
+/* Dependencias */
 import { useState, useRef, useEffect } from "react";
+
+ /* Icons */
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 
-export default function Filtro({ onChangeDificuldade, onChangeCategoria, onChangeOrdem }) {
+export default function Filtro({ onChangeDificuldade, onChangeCategoria, onChangeOrdem, qtd }) {
   /* Variaveis da Pagina */
   const CategoriasBanco = [
     { id: 1, nome: "Doces"},
@@ -96,14 +99,16 @@ export default function Filtro({ onChangeDificuldade, onChangeCategoria, onChang
     const [selectedCategoria, setSelectedCategoria] = useState(null);
     const handleCategoriaClick = (categoria) => {
       setSelectedCategoria(categoria.nome);
-      onChangeCategoria(categoria.id);
+      onChangeCategoria(categoria);
+      setCategoryOpen(false);
     };
 
     /* Funções de Ordenar por */
     const [selectedOrdem, setSelectedOrdem] = useState(null);
     const handleOrdemClick = (ordem) => {
       setSelectedOrdem(ordem.nome);
-      onChangeOrdem(ordem.id);
+      onChangeOrdem(ordem);
+      setOrderOpen(false);
     };
     
     /* Funções de limpar filtro */
@@ -141,7 +146,7 @@ export default function Filtro({ onChangeDificuldade, onChangeCategoria, onChang
           {/* Dropdown Categoria */}
           {categoryOpen && (
             <ul className="absolute mt-2 w-full bg-white shadow-lg border border-[#FF7B00] rounded-lg z-10 transition-opacity duration-200 ease-in-out opacity-100">
-              {CategoriasBanco.map((categoria) =>(
+              {CategoriasBanco.filter(categoria => categoria.nome !== selectedCategoria).map((categoria) =>(
                   <li onClick={() => handleCategoriaClick(categoria)} className="cursor-pointer hover:bg-[#FF7B00] hover:text-white px-4 py-2">{categoria.nome}</li>
               ))}
             </ul>
@@ -161,7 +166,7 @@ export default function Filtro({ onChangeDificuldade, onChangeCategoria, onChang
           {/* Dropdown Ordem */}
           {orderOpen && (
             <ul className="absolute mt-2 w-full bg-white shadow-lg border border-[#FF7B00] rounded-lg z-10 transition-opacity duration-200 ease-in-out opacity-100">
-              {OrdemBanco.map((ordem) =>(
+              {OrdemBanco.filter(ordem => ordem.nome !== selectedOrdem).map((ordem) =>(
                   <li onClick={() => handleOrdemClick(ordem)} className="cursor-pointer hover:bg-[#FF7B00] hover:text-white px-4 py-2">{ordem.nome}</li>
               ))}
             </ul>
@@ -175,7 +180,7 @@ export default function Filtro({ onChangeDificuldade, onChangeCategoria, onChang
         {/* Contador de receitas */}
         <div className="flex justify-center items-center space-x-1 ml-auto">
           <p className="font-light">Receitas:</p>
-          <p className="font-bold text-[#555555]">3</p>
+          <p className="font-bold text-[#555555]">{qtd}</p>
         </div>
 
       </div>
