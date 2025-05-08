@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const User_Foto = require('../models/User_Foto');
+const User_Foto = require('../controllers/UserFotoController');
 
 console.log("TESTE DE LOG - ao carregar o controller");
 
@@ -14,11 +14,16 @@ module.exports = {
         const hashPW = await bcrypt.hash(req.body.senha, saltRounds)
         req.body.senha = hashPW
 
-        const novoUsuario = await Usuario.create(req.body).fetch();
+        const novoUsuario = await Usuario.create({
+          nome: req.body.nome,
+          email: req.body.email,
+          usuario: req.body.usuario,
+          senha: req.body.senha
+        }).fetch();
 
-        if (req.body.user_foto) {
+        if (req.body.imagem) {
           try {
-            const bufferFoto = Buffer.from(req.body.user_foto, 'base64');
+            const bufferFoto = Buffer.from(req.body.imagem, 'base64');
             await User_Foto.create({
               usuario: novoUsuario.id,
               user_foto: bufferFoto

@@ -5,15 +5,13 @@ module.exports = {
           return res.status(400).json({ erro: 'Usuário é obrigatório para associar a foto' });
         }
 
-        if (!req.body.foto_usuario) {
+        if (!req.body.user_foto) {
           return res.status(400).json({ erro: 'Foto do usuário é obrigatória' });
         }
 
-        const bufferFoto = Buffer.from(req.body.foto_usuario, 'base64');
-
         const novaFoto = await User_Foto.create({
           usuario: req.body.usuario, 
-          user_foto: bufferFoto   
+          user_foto: req.body.user_foto   
         }).fetch();
 
         return res.status(201).json(novaFoto);

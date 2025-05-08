@@ -7,6 +7,7 @@ module.exports.routes = {
   'DELETE /usuario/:id': 'UsuarioController.delete',
   
   //Rotas Tabela UserFoto
+  'POST /user_foto': 'UserFotoController.create',
   'PUT /user_foto/:id': 'UserFotoController.update',
   'GET /user_foto/:id': 'UserFotoController.findOne',
 
