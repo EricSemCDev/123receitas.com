@@ -1,5 +1,5 @@
 module.exports = {
-  tableName: 'receita_foto',
+  tableName: 'Receita_Foto',
   primaryKey: 'id',
 
   attributes: {

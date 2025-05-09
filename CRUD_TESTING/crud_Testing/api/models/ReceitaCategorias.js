@@ -1,5 +1,5 @@
 module.exports = {
-  tableName: 'receita_categorias',
+  tableName: 'Receitas_Categorias',
   primaryKey: 'id',
 
   attributes: {
@@ -10,12 +10,10 @@ module.exports = {
     },
     categoria: {
       model: 'categoria',
-      columnName: 'id_categoria',
       required: true,
     },
     receita: {
       model: 'receita',
-      columnName: 'id_receita',
       required: true,
     },
     createdAt: {

@@ -1,39 +1,58 @@
+const fs = require('fs');
+
 module.exports = {
     // Criar uma nova receita
     create: async function (req, res) {
-        try {
-          // Criação da receita
-          const novaReceita = await Receita.create(req.body).fetch();
-      
-          // Verifica se vieram fotos (array de base64)
-          if (req.body.fotos && Array.isArray(req.body.fotos)) {
-            const fotosBuffer = req.body.fotos.map(base64 => {
-              return {
+      try {
+        // Criar a receita no banco
+        const novaReceita = await Receita.create({
+          titulo: req.body.titulo,
+          descricao: req.body.descricao,
+          modo_preparo: req.body.modo_preparo,
+          tempo_preparo: parseInt(req.body.tempo_preparo),
+          dificuldade: parseInt(req.body.dificuldade),
+          criador: req.body.criador,
+          ingredientes: req.body.ingredientes
+        }).fetch();
+    
+        // --- TRATAMENTO DAS FOTOS (arquivos reais) ---
+        const arquivos = req.file('fotos');
+        if (arquivos && arquivos._files.length > 0) {
+          await new Promise((resolve, reject) => {
+            arquivos.upload({
+              maxBytes: 5 * 1024 * 1024, // 5MB máx por imagem
+              dirname: require('path').resolve(sails.config.appPath, 'assets/uploads/receitas')
+            }, async function (err, uploadedFiles) {
+              if (err) return reject(err);
+    
+              // Limitar a 4 fotos no máximo
+              const fotosParaSalvar = uploadedFiles.slice(0, 4).map(file => ({
                 receita: novaReceita.id,
-                receita_foto: Buffer.from(base64, 'base64')
-              };
+                receita_foto: require('fs').readFileSync(file.fd)
+              }));
+    
+              await ReceitaFoto.createEach(fotosParaSalvar);
+              resolve();
             });
-      
-            await Receita_Foto.createEach(fotosBuffer);
-          }
-          
-          // Verifica se vieram categorias (array de ids)
-          if (req.body.categorias && Array.isArray(req.body.categorias)) {
-            const categoriasAssociadas = req.body.categorias.map(categoriaId => {
-              return {
-                receita: novaReceita.id,
-                categoria: categoriaId
-              };
-            });
-      
-            await ReceitaCategorias.createEach(categoriasAssociadas);
-          }
-      
-          return res.status(201).json(novaReceita);
-        } catch (error) {
-          return res.status(500).json({ erro: 'Erro ao criar receita', detalhes: error.message });
+          });
         }
-    },      
+    
+        // --- CATEGORIAS ASSOCIADAS ---
+        if (req.body.categorias && Array.isArray(req.body.categorias)) {
+          const categoriasAssociadas = req.body.categorias.map(categoriaId => ({
+            receita: novaReceita.id,
+            categoria: parseInt(categoriaId)
+          }));
+          await ReceitaCategorias.createEach(categoriasAssociadas);
+        }
+    
+        return res.status(201).json(novaReceita);
+    
+      } catch (error) {
+        console.error('Erro ao criar receita:', error);
+        return res.status(500).json({ erro: 'Erro ao criar receita', detalhes: error.message });
+      }
+    },
     // Buscar todas as receitas
     findAll: async function (req, res) {
       try {
@@ -52,6 +71,36 @@ module.exports = {
         }
         return res.json(receita);
       } catch (error) {
+        return res.status(500).json({ erro: 'Erro ao buscar receita', detalhes: error.message });
+      }
+    },
+    //Busca das fotos pelo ID de uma receita
+    getById: async function (req, res) {
+      try {
+        const id = parseInt(req.params.id);
+    
+        const receita = await Receita.findOne({ id })
+          .populate('fotos')
+          .populate('categorias');
+    
+        if (!receita) {
+          return res.status(404).json({ erro: 'Receita não encontrada' });
+        }
+    
+        // Converter as fotos binárias em base64
+        if (receita.fotos && receita.fotos.length > 0) {
+          receita.fotos = receita.fotos.map(foto => {
+            return {
+              id: foto.id,
+              receita: foto.receita,
+              receita_foto: Buffer.from(foto.receita_foto).toString('base64')
+            };
+          });
+        }
+    
+        return res.json(receita);
+      } catch (error) {
+        console.error('Erro ao buscar receita:', error);
         return res.status(500).json({ erro: 'Erro ao buscar receita', detalhes: error.message });
       }
     },

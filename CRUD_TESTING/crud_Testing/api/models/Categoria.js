@@ -1,5 +1,5 @@
 module.exports = {
-  tableName: 'categoria',
+  tableName: 'Categoria',
   primaryKey: 'id',
 
   attributes: {
@@ -22,6 +22,10 @@ module.exports = {
       type: 'ref',
       columnType: 'timestamp without time zone',
       autoUpdatedAt: true
+    },
+    receitas: {
+      collection: 'ReceitaCategorias',
+      via: 'categoria'
     }
   }
 };

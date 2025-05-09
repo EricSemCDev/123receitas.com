@@ -1,4 +1,20 @@
 module.exports = {
+    create: async function (req, res) {
+      try {
+        if (!req.body.receita || !req.body.foto) {
+          return res.status(400).json({ erro: 'ID da receita e a foto são obrigatórios' });
+        }
+    
+        const novaFoto = await Receita_Foto.create({
+          receita: req.body.receita,
+          receita_foto: Buffer.from(req.body.foto, 'base64')
+        }).fetch();
+    
+        return res.status(201).json(novaFoto);
+      } catch (error) {
+        return res.status(500).json({ erro: 'Erro ao adicionar foto', detalhes: error.message });
+      }
+    },
     update: async function (req, res) {
       try {
         const receitaId = req.params.id;

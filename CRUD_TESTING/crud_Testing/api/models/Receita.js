@@ -43,19 +43,18 @@ module.exports = {
       required: true
     },
     createdAt: {
-      type: 'ref', 
+      type: 'ref',
       columnType: 'timestamp without time zone',
-      autoCreatedAt: true 
+      autoCreatedAt: true
     },
     updatedAt: {
-      type: 'ref', 
+      type: 'ref',
       columnType: 'timestamp without time zone',
-      autoUpdatedAt: true 
+      autoUpdatedAt: true
     },
     //Chaves estrangeiras
     criador: {
       model: 'usuario',
-      columnName: 'id_criador',
       required: true
     },
 
@@ -75,7 +74,7 @@ module.exports = {
     categorias: {
       collection: 'ReceitaCategorias',
       via: 'receita'
-    }    
+    }
   },
 };
 

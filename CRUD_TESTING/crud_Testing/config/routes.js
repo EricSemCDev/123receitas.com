@@ -15,6 +15,7 @@ module.exports.routes = {
   'POST /receita': 'ReceitaController.create',
   'GET /receita': 'ReceitaController.findAll',
   'GET /receita/:id': 'ReceitaController.findOne',
+  'GET /receita/detalhes/:id': 'ReceitaController.getById',
   'PUT /receita/:id': 'ReceitaController.update',
   'DELETE /receita/:id': 'ReceitaController.delete',
 
