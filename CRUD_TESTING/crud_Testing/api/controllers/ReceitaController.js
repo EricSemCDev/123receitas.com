@@ -38,14 +38,29 @@ module.exports = {
         }
     
         // --- CATEGORIAS ASSOCIADAS ---
-        if (req.body.categorias && Array.isArray(req.body.categorias)) {
-          const categoriasAssociadas = req.body.categorias.map(categoriaId => ({
-            receita: novaReceita.id,
-            categoria: parseInt(categoriaId)
-          }));
-          await ReceitaCategorias.createEach(categoriasAssociadas);
+        if (req.body.categorias) {
+          let categorias = req.body.categorias
+
+          if (typeof categorias === 'string') {
+            try {
+              categorias = JSON.parse(categorias)
+            } catch (e) {
+              console.warn('Categorias veio como string mal formatada: ', req.body.categorias)
+              categorias = []
+            }
+          }
+          
+          if (Array.isArray(categorias)) {
+            const categoriasAssociadas = categorias.map(categoriaId => ({
+              receita: novaReceita.id,
+              categoria: parseInt(categoriaId)
+            }));
+            await ReceitaCategorias.createEach(categoriasAssociadas);
+          } else {  
+            console.warn('Nenhuma categoria associada ou o formato está incorreto');
+          }
         }
-    
+        
         return res.status(201).json(novaReceita);
     
       } catch (error) {

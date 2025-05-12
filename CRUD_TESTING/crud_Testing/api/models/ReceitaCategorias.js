@@ -9,11 +9,11 @@ module.exports = {
       autoIncrement: true,
     },
     categoria: {
-      model: 'categoria',
+      model: 'Categoria',
       required: true,
     },
     receita: {
-      model: 'receita',
+      model: 'Receita',
       required: true,
     },
     createdAt: {
