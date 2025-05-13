@@ -1,8 +1,6 @@
 const bcrypt = require('bcrypt');
 const User_Foto = require('../controllers/UserFotoController');
 
-console.log("TESTE DE LOG - ao carregar o controller");
-
 module.exports = {
     // Criar um novo usuário
     create: async function (req, res) {
