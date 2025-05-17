@@ -29,3 +29,22 @@ export async function cadastrar(dados) {
     throw error;
   }
 }
+export async function login(dados) {
+  
+}
+export async function editarPerfil(dados) {
+  
+}
+export async function criarReceita(dados) {
+  
+}
+export async function editarReceita(dados) {
+  
+}
+//Separar filtro a filtro ou função global e identar strings?
+export async function filtrarReceita(filtros) {
+  
+}
+export async function buscaReceitaNome(nomeReceita) {
+  
+}
