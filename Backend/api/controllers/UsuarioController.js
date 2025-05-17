@@ -5,12 +5,13 @@ module.exports = {
     // Criar um novo usuário
     create: async function (req, res) {
       try {
-        if(!req.body.senha) {
-          return res.status(400).json({ erro: 'Senha Obrigatória'})
+        if (!req.body.senha) {
+          return res.status(400).json({ erro: 'Senha obrigatória' });
         }
-        const saltRounds = 10
-        const hashPW = await bcrypt.hash(req.body.senha, saltRounds)
-        req.body.senha = hashPW
+
+        const saltRounds = 10;
+        const hashPW = await bcrypt.hash(req.body.senha, saltRounds);
+        req.body.senha = hashPW;
 
         const novoUsuario = await Usuario.create({
           nome: req.body.nome,
@@ -19,20 +20,24 @@ module.exports = {
           senha: req.body.senha
         }).fetch();
 
-        if (req.body.imagem) {
-          try {
-            const bufferFoto = Buffer.from(req.body.imagem, 'base64');
+        req.file('imagem').upload({}, async (err, arquivos) => {
+          if (!err && arquivos.length > 0) {
+            const fs = require('fs');
+            const path = arquivos[0].fd;
+            const bufferFoto = fs.readFileSync(path);
+
             await User_Foto.create({
               usuario: novoUsuario.id,
               user_foto: bufferFoto
             });
-          } catch (e) {
-            return res.status(400).json({ erro: 'Erro ao processar a imagem enviada.' });
+            console.log(`Foto do usuario ${novoUsuario.usuario} salva`)
+          } else {
+            console.log(`Nenhuma imagem para o usuário ${novoUsuario.usuario} enviada`)
           }
-        }
 
-        const { senha, ...usuarioSemSenha } = novoUsuario;
-        return res.status(201).json(usuarioSemSenha);
+          const { senha, ...usuarioSemSenha } = novoUsuario;
+          return res.status(201).json(usuarioSemSenha);
+        });
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao criar usuário', detalhes: error.message });
       }

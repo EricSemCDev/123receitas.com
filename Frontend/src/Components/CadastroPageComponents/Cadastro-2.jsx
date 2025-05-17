@@ -1,6 +1,7 @@
 /* Dependencias */
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { cadastrar } from "../../config/api";
 
 /* Icons */
 import { FaFileImage, FaArrowCircleLeft, FaCheckCircle } from "react-icons/fa";
@@ -15,20 +16,28 @@ export default function Cadastro2({ voltarEtapa, dadosAdicionais, setDadosAdicio
         setShowPassword(!showPassword);
     };
 
-    const handleFinalizarCadastro = () => {
+    const handleFinalizarCadastro = async () => {
         const dadosCompletos = {
           ...dadosCadastro,
           ...dadosAdicionais
         };
-      
-        console.log("Dados completos do cadastro:", dadosCompletos);
+        
+        console.log(`Imagem adicionada: ${dadosAdicionais.imagemSelecionada}`)
 
-        navigate("/");
+        try {
+            const cadastro = await cadastrar(dadosCompletos)
+            console.log("Dados completos do cadastro:", cadastro);
+        } catch (erro) {
+            console.log("Erro no Cadastro:" + erro.message)
+        }
+
+        //navigate("/");
       };
 
     const handleImagemChange = (e) => {
         const file = e.target.files[0];
         if (file) {
+          console.log("Imagem adicionada")  
           setImagemSelecionada(file);
           setDadosAdicionais({ ...dadosAdicionais, imagem: file });
         } else {
