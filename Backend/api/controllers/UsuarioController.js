@@ -20,8 +20,18 @@ module.exports = {
           senha: req.body.senha
         }).fetch();
 
+        console.log('🔍 Iniciando upload de imagem...');
+
         req.file('imagem').upload({}, async (err, arquivos) => {
-          if (!err && arquivos.length > 0) {
+          if (err) {
+            console.error('❌ Erro no upload da imagem:', err);
+            return res.status(500).json({ erro: 'Erro ao fazer upload da imagem.' });
+          }
+
+          if (!arquivos || arquivos.length === 0) {
+            console.log('⚠️ Nenhuma imagem foi enviada.');
+          } else {
+            console.log('✅ Imagem recebida:', arquivos[0]);
             const fs = require('fs');
             const path = arquivos[0].fd;
             const bufferFoto = fs.readFileSync(path);
@@ -30,14 +40,14 @@ module.exports = {
               usuario: novoUsuario.id,
               user_foto: bufferFoto
             });
-            console.log(`Foto do usuario ${novoUsuario.usuario} salva`)
-          } else {
-            console.log(`Nenhuma imagem para o usuário ${novoUsuario.usuario} enviada`)
+
+            console.log(`📸 Foto de usuário ID ${novoUsuario.id} salva com sucesso.`);
           }
 
           const { senha, ...usuarioSemSenha } = novoUsuario;
           return res.status(201).json(usuarioSemSenha);
         });
+
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao criar usuário', detalhes: error.message });
       }

@@ -10,7 +10,7 @@ export async function cadastrar(dados) {
     formData.append('usuario', dados.username);
 
     if (dados.foto) {
-      formData.append('imagem', dados.foto);
+      formData.append('imagem', dados.imagem);
     }
 
     const response = await fetch(`${API_BASE_URL}/usuario`, {

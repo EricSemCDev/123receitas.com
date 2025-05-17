@@ -19,10 +19,11 @@ export default function Cadastro2({ voltarEtapa, dadosAdicionais, setDadosAdicio
     const handleFinalizarCadastro = async () => {
         const dadosCompletos = {
           ...dadosCadastro,
-          ...dadosAdicionais
+          ...dadosAdicionais,
+          imagem: imagemSelecionada
         };
         
-        console.log(`Imagem adicionada: ${dadosAdicionais.imagemSelecionada}`)
+        console.log(`Imagem adicionada: ${dadosAdicionais.imagem.name}, ${dadosAdicionais.imagem.type}`)
 
         try {
             const cadastro = await cadastrar(dadosCompletos)
