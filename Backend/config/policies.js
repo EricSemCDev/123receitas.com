@@ -1,7 +1,7 @@
 module.exports.policies = {
   UsuarioController: {
-    create: true, // Registro é público
-    update: 'isAuthorized', // Alterar perfil exige login
+    create: true,
+    update: 'isAuthorized',
     find: 'isAuthorized'
   },
   AuthController: {

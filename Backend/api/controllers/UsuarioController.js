@@ -85,7 +85,7 @@ module.exports = {
           const saltRounds = 10;
           req.body.senha = await bcrypt.hash(req.body.senha, saltRounds);
         }
-        const usuarioAtualizado = await Usuario.updateOne({ id: req.params.id }).set(req.body);
+        const usuarioAtualizado = await Usuario.updateOne({ id: req.usuario.id }).set(req.body);
         const { senha, ...usuarioAttSemSenha } = usuarioAtualizado;
         if (!usuarioAttSemSenha) {
           return res.status(404).json({ erro: 'Usuário não encontrado' });

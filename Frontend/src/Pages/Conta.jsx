@@ -16,15 +16,16 @@ export default function Conta() {
     imagem: "",
   });
 
-  useEffect(() => {
-    async function carregarUsuario() {
-      try {
-        const dados = await buscarUsuarioLogado();
-        setUsuario(dados);
-      } catch (erro) {
-        console.error("Erro ao carregar dados do usuário:", erro.message);
-      }
+  async function carregarUsuario() {
+    try {
+      const dados = await buscarUsuarioLogado();
+      setUsuario(dados);
+    } catch (erro) {
+      console.error("Erro ao carregar dados do usuário:", erro.message);
     }
+  }
+
+  useEffect(() => {
     carregarUsuario();
   }, []);
 
@@ -33,7 +34,7 @@ export default function Conta() {
       setDadosAdicionais({
         nomeCompleto: usuario.nome,
         username: usuario.usuario,
-        imagem: "",
+        imagem: usuario.imagem,
       });
     }
   }, [usuario]);

@@ -38,9 +38,4 @@ module.exports.routes = {
   //Rotas AuthController
   'POST /auth/login': 'AuthController.login',
   'GET /auth/me': 'AuthController.me',
-
-  //Rotas de TESTE
-  'POST /uploadTeste': 'UploadController.testeUpload',
-
-
 };

@@ -23,24 +23,24 @@ export default function PopupEdit({ dadosAdicionais, setDadosAdicionais, fechar}
 
         const handleFinalizarEdicao = async () => {
             const dadosParaAPI = {
-            nome: formTemp.nome,
-            usuario: formTemp.usuario,
-            imagem: formTemp.imagem,
-        };
+                nome: formTemp.nome,
+                usuario: formTemp.usuario,
+                imagem: formTemp.imagem,
+            };
 
-        try {
-            await editarPerfil(dadosParaAPI); // envia ao backend
-            setDadosAdicionais(formTemp); // atualiza visualmente
-            fechar(true); // fecha o popup e avisa para recarregar os dados
-        } catch (error) {
-            console.error("Erro ao editar perfil:", error.message);
-        }
+            try {
+                const resultado = await editarPerfil(dadosParaAPI); // espera a confirmação do backend
+                fechar(true); // só depois de tudo certo
+            } catch (error) {
+                console.error("Erro ao editar perfil:", error.message);
+            }
         };
       
         const handleImagemChange = (e) => {
             const file = e.target.files[0];
             if (file) {
-            setFormTemp({ ...formTemp, imagem: file });
+                setImagemSelecionada(true);
+                setFormTemp({ ...formTemp, imagem: file });
             }
         };
       
@@ -61,13 +61,13 @@ export default function PopupEdit({ dadosAdicionais, setDadosAdicionais, fechar}
         {/* Input de Nome Completo */}
         <div className="mb-2 w-full">
             <p className="text-sm text-[#00000] mx-2 mb-1">Nome Completo</p>
-            <input type="text" placeholder="Roberto da Silva" value={formTemp.nomeCompleto} onChange={(e) => setFormTemp({ ...formTemp, nomeCompleto: e.target.value })} className="w-full py-2 pl-4 pr-20 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF3700]"/>
+            <input type="text" placeholder="Roberto da Silva" value={formTemp.nome} onChange={(e) => setFormTemp({ ...formTemp, nome: e.target.value })} className="w-full py-2 pl-4 pr-20 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF3700]"/>
         </div>
 
         {/* Input de Username */}
         <div className="mb-2 w-full">
             <p className="text-sm text-[#00000] mx-2 mb-1">Username</p>
-            <input type="text" placeholder="Rei Da Costela" value={formTemp.username} onChange={(e) => setFormTemp({ ...formTemp, username: e.target.value })} className="w-full py-2 pl-4 pr-20 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF3700]"/>
+            <input type="text" placeholder="Rei Da Costela" value={formTemp.usuario} onChange={(e) => setFormTemp({ ...formTemp, usuario: e.target.value })} className="w-full py-2 pl-4 pr-20 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF3700]"/>
         </div>
 
         {/* Input de imagem com feedback */}
