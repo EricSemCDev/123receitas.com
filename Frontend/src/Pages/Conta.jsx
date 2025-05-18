@@ -9,13 +9,14 @@ import { buscarUsuarioLogado } from "../config/api";
 export default function Conta() {
   const [usuario, setUsuario] = useState(null);
   const [mostrarPopup, setMostrarPopup] = useState(false);
-
   const [dadosAdicionais, setDadosAdicionais] = useState({
-    nomeCompleto: "",
-    username: "",
+    nome: "",
+    usuario: "",
     imagem: "",
+    createdAt: ""
   });
 
+  // Função para buscar os dados do usuário logado
   async function carregarUsuario() {
     try {
       const dados = await buscarUsuarioLogado();
@@ -29,12 +30,14 @@ export default function Conta() {
     carregarUsuario();
   }, []);
 
+  // Atualiza os dados locais quando o usuário muda
   useEffect(() => {
     if (usuario) {
       setDadosAdicionais({
-        nomeCompleto: usuario.nome,
-        username: usuario.usuario,
+        nome: usuario.nome,
+        usuario: usuario.usuario,
         imagem: usuario.imagem,
+        createdAt: usuario.createdAt
       });
     }
   }, [usuario]);
@@ -68,7 +71,10 @@ export default function Conta() {
               fechar={(recarregar = false) => {
                 setMostrarPopup(false);
                 if (recarregar) {
-                  carregarUsuario(); // Função que você já tem
+                  // Aguarda um pequeno tempo para garantir que o backend já salvou tudo
+                  setTimeout(() => {
+                    carregarUsuario();
+                  }, 300);
                 }
               }}
             />

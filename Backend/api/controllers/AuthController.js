@@ -44,7 +44,6 @@ module.exports = {
       const foto = await User_Foto.findOne({ usuario: req.usuario.id });
       // Se existir a imagem, convertê-la para Base64
       if (foto && foto.user_foto) {
-        console.log("Foto encontrada")
         usuario.imagem = Buffer.from(foto.user_foto).toString('base64');
       } else {
         usuario.imagem = null;

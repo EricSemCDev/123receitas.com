@@ -113,16 +113,19 @@ export async function criarReceita(dados) {
     const formData = new FormData();
 
     formData.append('titulo', dados.titulo);
-    formData.append('descricao', dados.descricao);
-    formData.append('modoPreparo', dados.modoPreparo);
+    formData.append('descricao', "Uma receita de desastre"); //trocar para dados.descricao depois
+    formData.append('modo_preparo', dados.modoPreparo);
+    formData.append('tempo_preparo', dados.tempoPreparo);
+    formData.append('dificuldade', dados.dificuldade);
+    formData.append('criador', dados.criador);
+    formData.append('ingredientes', dados.ingredientes);
 
     dados.categorias.forEach(cat => {
-      formData.append('categorias[]', cat);
+      formData.append('categorias', cat);
     });
 
-    //É IMAGEM NÃO FOTO A PORRA DO NOME
-    dados.fotos.forEach(foto => {
-      formData.append('fotos', foto); // backend deve aceitar array de arquivos
+    dados.imagens.forEach(imagens => {
+      formData.append('fotos', imagens);
     });
 
     const response = await fetch(`${API_BASE_URL}/receita`, {

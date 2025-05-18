@@ -85,17 +85,37 @@ module.exports = {
           const saltRounds = 10;
           req.body.senha = await bcrypt.hash(req.body.senha, saltRounds);
         }
-        const usuarioAtualizado = await Usuario.updateOne({ id: req.usuario.id }).set(req.body);
-        const { senha, ...usuarioAttSemSenha } = usuarioAtualizado;
-        if (!usuarioAttSemSenha) {
-          return res.status(404).json({ erro: 'Usuário não encontrado' });
-        }
-        return res.json(usuarioAttSemSenha);
+
+        req.file('imagem').upload({}, async (err, arquivos) => {
+          if (err) {
+            return res.status(500).json({ erro: 'Erro no upload de imagem.' });
+          }
+
+          // Se uma nova imagem foi enviada, atualiza ou cria
+          if (arquivos && arquivos.length > 0) {
+            const fs = require('fs');
+            const path = arquivos[0].fd;
+            const bufferFoto = fs.readFileSync(path);
+
+            await User_Foto.updateOne({ usuario: req.usuario.id }).set({
+              user_foto: bufferFoto
+            });
+          }
+
+          // Atualiza os dados do usuário
+          const usuarioAtualizado = await Usuario.updateOne({ id: req.usuario.id }).set(req.body);
+          const { senha, ...usuarioAttSemSenha } = usuarioAtualizado;
+
+          if (!usuarioAttSemSenha) {
+            return res.status(404).json({ erro: 'Usuário não encontrado' });
+          }
+
+          return res.json(usuarioAttSemSenha);
+        });
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao atualizar usuário', detalhes: error.message });
       }
     },
-  
     // Deletar um usuário por ID
     delete: async function (req, res) {
       try {

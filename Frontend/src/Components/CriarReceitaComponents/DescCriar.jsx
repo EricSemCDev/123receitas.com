@@ -5,6 +5,9 @@ import CarrosselCriar from "./CarrosselCriar";
 import CaracterísticasCriar from "./CaracteristicasCriar";
 import IngredientesCriar from "./IngredientesCriar";
 import ModoPreparoCriar from "./modo-preparoCriar";
+/* API */
+import { criarReceita } from "../../config/api";
+import { buscarUsuarioLogado } from "../../config/api";
 
 export default function DescCriar() {
     /* Variaveis da Pagina */
@@ -18,19 +21,27 @@ export default function DescCriar() {
     const [images, setImages] = useState([]);
 
     // Função para salvar e testar os dados
-    const handleSalvar = () => {
+    const handleSalvar = async () => {
+        const loggedUser = await buscarUsuarioLogado()
+
         const dadosReceita = {
             titulo,
             tempoPreparo,
             porcoes,
             dificuldade,
             categorias: categoriasSelecionadas,
-            ingredientes,
-            modoPreparo: passos,
+            ingredientes: ingredientes.join(';'),
+            modoPreparo: passos.join(';'),
             imagens: images,
+            criador: loggedUser.id
         };
-
-        console.log("Receita para envio:", dadosReceita);
+        
+        try {
+            const receita = await criarReceita(dadosReceita)
+            console.log("Dados completos da receita:", receita);
+        } catch (erro) {
+            console.log("Erro ao criar Receita:" + erro.message)
+        }
     };
 
     return (

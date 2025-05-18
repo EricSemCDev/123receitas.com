@@ -1,7 +1,7 @@
 /* Dependencias */
 import { useState } from "react";
-
 import { FaPlus } from "react-icons/fa"; // ícone para o slot vazio
+/* Import das API */
 
 export default function ImageCarousel({ images, setImages }) {
   /* Variaveis da Pagina */

@@ -1,69 +1,60 @@
-import { useEffect, useState } from "react";
-/* Icons */
 import { FaPencil } from "react-icons/fa6";
-/* API */
-import { buscarUsuarioLogado } from "../../config/api";
 
-export default function InfoPerfil({ onEditar }) {
-  const [usuario, setUsuario] = useState(null);
-
-  const carregarUsuario = async () => {
-    try {
-      const dados = await buscarUsuarioLogado();
-      setUsuario(dados);
-    } catch (erro) {
-      console.error("Erro ao carregar dados do usuário:", erro.message);
-    }
-  };
-
-  useEffect(() => {
-    carregarUsuario();
-  }, []);
-
-
-  if (!usuario) return <p>Carregando perfil...</p>;
+export default function InfoPerfil({ onEditar, dadosAdicionais }) {
+  if (!dadosAdicionais || !dadosAdicionais.nome || !dadosAdicionais.usuario) {
+    return <p>Carregando perfil...</p>;
+  }
 
   return (
     <section className="h-150 w-80 p-5 border-t-4 border-t-[#FF7B00] border-1 border-[#c9c9c9] shadow-lg flex flex-col space-y-4">
-
+      
       {/* Imagem de Perfil */}
       <div className="w-full h-1/2">
         <img
-          src={usuario.imagem ? `data:image/jpeg;base64,${usuario.imagem}` : "/default-avatar.png"}
-          alt="IMAGEM"
+          src={
+            dadosAdicionais.imagem
+              ? `data:image/jpeg;base64,${dadosAdicionais.imagem}`
+              : "/default-avatar.png"
+          }
+          alt="Imagem de perfil"
           className="w-full h-full object-cover border-2 border-[#FF7B00]"
         />
       </div>
 
+      {/* Nome e botão de edição */}
       <div className="w-full flex justify-between items-center">
-        {/* Nome do Perfil */}
-        <p className="font-semibold text-2xl">{usuario.nome}</p>
-
-        {/* Botão de Edição */}
+        <p className="font-semibold text-2xl">{dadosAdicionais.nome}</p>
         <button onClick={onEditar}>
           <FaPencil className="text-xl" />
         </button>
       </div>
 
-      {/* Container Infos */}
+      {/* Informações adicionais */}
       <div className="bg-[#EBE8E8] w-full p-3 space-y-5 rounded-lg flex flex-col">
-
-        {/* Username */}
+        
         <div className="flex justify-between text-sm">
-          <p className="bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent">Usuário</p>
-          <p className="font-light">{usuario.usuario}</p>
+          <p className="bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent">
+            Usuário
+          </p>
+          <p className="font-light">{dadosAdicionais.usuario}</p>
         </div>
 
         <div className="w-full h-[1px] bg-[#c9c9c9]"></div>
 
-        {/* Membro desde */}
-        <div className="flex justify-between text-sm">
-          <p className="bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent">Membro Desde</p>
-          <p className="font-light">{new Date(usuario.createdAt).toLocaleDateString()}</p>
-        </div>
+        {/* Campo opcional de data */}
+        {dadosAdicionais.createdAt && (
+          <div className="flex justify-between text-sm">
+            <p className="bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent">
+              Membro Desde
+            </p>
+            <p className="font-light">
+              {new Date(dadosAdicionais.createdAt).toLocaleDateString()}
+            </p>
+          </div>
+        )}
       </div>
 
-      {/* Sair da Conta */}
+      {/* Botão de sair (sem funcionalidade ligada ainda) */}
       <button className="cursor-pointer w-full h-12 mt-2 rounded-xl flex justify-center items-center bg-[#FF7B00] hover:bg-[#FF3700] transition-all duration-300 ease-in-out transform hover:scale-98">
         <p className="text-white font-semibold text-xl">SAIR DA CONTA</p>
       </button>

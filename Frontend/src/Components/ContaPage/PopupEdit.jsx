@@ -29,8 +29,10 @@ export default function PopupEdit({ dadosAdicionais, setDadosAdicionais, fechar}
             };
 
             try {
-                const resultado = await editarPerfil(dadosParaAPI); // espera a confirmação do backend
-                fechar(true); // só depois de tudo certo
+                await editarPerfil(dadosParaAPI); // espera a confirmação do backend
+                setTimeout(() => {
+                     fechar(true); // só depois de tudo certo
+                }, 1000);
             } catch (error) {
                 console.error("Erro ao editar perfil:", error.message);
             }
