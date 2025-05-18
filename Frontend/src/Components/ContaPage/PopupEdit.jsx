@@ -1,6 +1,7 @@
 /* Dependencias */
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { editarPerfil } from "../../config/api";
 
 /* Icons */
 import { FaFileImage, FaArrowCircleLeft, FaCheckCircle } from "react-icons/fa";
@@ -10,8 +11,8 @@ export default function PopupEdit({ dadosAdicionais, setDadosAdicionais, fechar}
         const [imagemSelecionada, setImagemSelecionada] = useState(null);
         const navigate = useNavigate();
         const [formTemp, setFormTemp] = useState({
-            nomeCompleto: "",
-            username: "",
+            nome: "",
+            usuario: "",
             imagem: null
         });
         
@@ -20,9 +21,20 @@ export default function PopupEdit({ dadosAdicionais, setDadosAdicionais, fechar}
             setFormTemp(dadosAdicionais);
         }, [dadosAdicionais]);
 
-        const handleFinalizarEdicao = () => {
-            setDadosAdicionais(formTemp); // Agora sim, aplica
-            fechar(); // Fecha o modal
+        const handleFinalizarEdicao = async () => {
+            const dadosParaAPI = {
+            nome: formTemp.nome,
+            usuario: formTemp.usuario,
+            imagem: formTemp.imagem,
+        };
+
+        try {
+            await editarPerfil(dadosParaAPI); // envia ao backend
+            setDadosAdicionais(formTemp); // atualiza visualmente
+            fechar(true); // fecha o popup e avisa para recarregar os dados
+        } catch (error) {
+            console.error("Erro ao editar perfil:", error.message);
+        }
         };
       
         const handleImagemChange = (e) => {

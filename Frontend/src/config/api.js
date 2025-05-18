@@ -29,12 +29,12 @@ export async function cadastrar(dados) {
     throw error;
   }
 }
-export async function login(dados) {
+export async function login(email, senha) {
   try {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(dados),
+      body: JSON.stringify({ email, senha }),
     });
 
     const resultado = await response.json();
@@ -60,10 +60,9 @@ export async function editarPerfil(dados) {
 
     formData.append('nome', dados.nome);
     formData.append('usuario', dados.usuario);
-    formData.append('email', dados.email);
-
-    if (dados.foto) {
-      formData.append('imagem', dados.foto);
+    
+    if (dados.imagem) {
+      formData.append('imagem', dados.imagem);
     }
 
     const response = await fetch(`${API_BASE_URL}/usuario/editar`, {
@@ -85,6 +84,29 @@ export async function editarPerfil(dados) {
     throw error;
   }
 }
+export async function buscarUsuarioLogado() {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('Usuário não está autenticado.');
+
+    const response = await fetch(`${API_BASE_URL}/auth/me`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    const resultado = await response.json();
+
+    if (!response.ok) {
+      throw new Error(resultado.erro || 'Erro ao buscar usuário logado');
+    }
+
+    return resultado;
+  } catch (error) {
+    throw error;
+  }
+}
 export async function criarReceita(dados) {
   try {
     const token = localStorage.getItem('token');
@@ -98,6 +120,7 @@ export async function criarReceita(dados) {
       formData.append('categorias[]', cat);
     });
 
+    //É IMAGEM NÃO FOTO A PORRA DO NOME
     dados.fotos.forEach(foto => {
       formData.append('fotos', foto); // backend deve aceitar array de arquivos
     });

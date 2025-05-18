@@ -1,6 +1,7 @@
 module.exports = {
     create: async function (req, res) {
       try {
+        const {usuario} = req
         if (!req.body.usuario) {
           return res.status(400).json({ erro: 'Usuário é obrigatório para associar a foto' });
         }

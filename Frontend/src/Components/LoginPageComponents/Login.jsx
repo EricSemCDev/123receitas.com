@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { login } from "../../config/api";
+import { useNavigate } from "react-router-dom";
 
 /* Icons */
 import { FaEye, FaEyeSlash, FaArrowCircleLeft } from "react-icons/fa";
@@ -9,15 +11,25 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [dados, setDados] = useState(email, senha);
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleLogin = () => {
-    console.log("Email:", email);
-    console.log("Senha:", senha);
-    // aqui você pode chamar uma API futuramente
+  const handleLogin = async () => {
+    try {
+      const userLogged = await login(email, senha)
+      if(userLogged) {
+        console.log("Login realizado")
+        console.log(userLogged.token)
+        //Trocar para MainPage
+        navigate("/Conta")
+      }
+    } catch(e) {
+      console.log(e.message)
+    }
   };
 
   return (

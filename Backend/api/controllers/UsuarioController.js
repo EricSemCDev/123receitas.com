@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const User_Foto = require('../controllers/UserFotoController');
 
 module.exports = {
     // Criar um novo usuário

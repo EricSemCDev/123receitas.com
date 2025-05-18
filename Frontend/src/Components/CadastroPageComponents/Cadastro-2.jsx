@@ -22,9 +22,6 @@ export default function Cadastro2({ voltarEtapa, dadosAdicionais, setDadosAdicio
           ...dadosAdicionais,
           imagem: imagemSelecionada
         };
-        
-        console.log(`Imagem adicionada: ${dadosAdicionais.imagem.name}, ${dadosAdicionais.imagem.type}`)
-
         try {
             const cadastro = await cadastrar(dadosCompletos)
             console.log("Dados completos do cadastro:", cadastro);

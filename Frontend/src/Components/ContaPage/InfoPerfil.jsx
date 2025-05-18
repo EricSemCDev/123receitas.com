@@ -1,18 +1,43 @@
-/*Icons*/
+import { useEffect, useState } from "react";
+/* Icons */
 import { FaPencil } from "react-icons/fa6";
+/* API */
+import { buscarUsuarioLogado } from "../../config/api";
 
-export default function InfoPerfil({ onEditar, dadosAdicionais }) {
+export default function InfoPerfil({ onEditar }) {
+  const [usuario, setUsuario] = useState(null);
+
+  const carregarUsuario = async () => {
+    try {
+      const dados = await buscarUsuarioLogado();
+      setUsuario(dados);
+    } catch (erro) {
+      console.error("Erro ao carregar dados do usuário:", erro.message);
+    }
+  };
+
+  useEffect(() => {
+    carregarUsuario();
+  }, []);
+
+
+  if (!usuario) return <p>Carregando perfil...</p>;
+
   return (
     <section className="h-150 w-80 p-5 border-t-4 border-t-[#FF7B00] border-1 border-[#c9c9c9] shadow-lg flex flex-col space-y-4">
 
       {/* Imagem de Perfil */}
       <div className="w-full h-1/2">
-        <img src={dadosAdicionais.imagem ? URL.createObjectURL(dadosAdicionais.imagem): dadosAdicionais.imagem} alt="IMAGEM" className="w-full h-full object-cover border-2 border-[#FF7B00]"/>
+        <img
+          src={usuario.imagem ? `data:image/jpeg;base64,${usuario.imagem}` : "/default-avatar.png"}
+          alt="IMAGEM"
+          className="w-full h-full object-cover border-2 border-[#FF7B00]"
+        />
       </div>
 
       <div className="w-full flex justify-between items-center">
         {/* Nome do Perfil */}
-        <p className="font-semibold text-2xl">{dadosAdicionais.nomeCompleto}</p>
+        <p className="font-semibold text-2xl">{usuario.nome}</p>
 
         {/* Botão de Edição */}
         <button onClick={onEditar}>
@@ -20,14 +45,13 @@ export default function InfoPerfil({ onEditar, dadosAdicionais }) {
         </button>
       </div>
 
-
       {/* Container Infos */}
       <div className="bg-[#EBE8E8] w-full p-3 space-y-5 rounded-lg flex flex-col">
 
-         {/* username */}
+        {/* Username */}
         <div className="flex justify-between text-sm">
           <p className="bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent">Usuário</p>
-          <p className="font-light">{dadosAdicionais.username}</p>
+          <p className="font-light">{usuario.usuario}</p>
         </div>
 
         <div className="w-full h-[1px] bg-[#c9c9c9]"></div>
@@ -35,7 +59,7 @@ export default function InfoPerfil({ onEditar, dadosAdicionais }) {
         {/* Membro desde */}
         <div className="flex justify-between text-sm">
           <p className="bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent">Membro Desde</p>
-          <p className="font-light">{dadosAdicionais.MembroDesde}</p>
+          <p className="font-light">{new Date(usuario.createdAt).toLocaleDateString()}</p>
         </div>
       </div>
 
