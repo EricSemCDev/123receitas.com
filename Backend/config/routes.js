@@ -35,6 +35,9 @@ module.exports.routes = {
   'GET /receita-categorias': 'ReceitaCategoriasController.findAll',
   'DELETE /receita-categorias/:id': 'ReceitaCategoriasController.delete',
 
+  //Rotas AuthController
+  'POST /auth/login': 'AuthController.login',
+
   //Rotas de TESTE
   'POST /uploadTeste': 'UploadController.testeUpload',
 
