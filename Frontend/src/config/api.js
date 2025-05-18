@@ -9,7 +9,7 @@ export async function cadastrar(dados) {
     formData.append('nome', dados.nomeCompleto);
     formData.append('usuario', dados.username);
 
-    if (dados.foto) {
+    if (dados.imagem) {
       formData.append('imagem', dados.imagem);
     }
 
