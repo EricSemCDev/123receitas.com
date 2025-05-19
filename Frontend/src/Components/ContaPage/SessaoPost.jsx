@@ -21,6 +21,11 @@ export default function InfoPerfil() {
                 <p className="text-white font-semibold text-xl">Criar Post</p>
             </Link>
         </div>
+        <div className="flex items-center justify-between space-x-20 pt-12">
+          {receitas.map((receita) =>(
+              <ReceitaCard key={receita.id} receita={receita} />
+          ))}
+        </div>
      </section>
     );
   }

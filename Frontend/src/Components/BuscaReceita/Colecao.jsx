@@ -1,5 +1,6 @@
 /* Dependencias */
 import { useState, useEffect } from "react";
+import { buscaReceitaID } from "../../config/api";
 
 /* Componentes */
 import ReceitaCard from "../Geral/receitaCard";

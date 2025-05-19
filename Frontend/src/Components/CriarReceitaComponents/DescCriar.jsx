@@ -1,6 +1,6 @@
 /* Dependências */
 import { useState } from "react";
-import { navigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 /* Componentes */
 import CarrosselCriar from "./CarrosselCriar";
 import CaracterísticasCriar from "./CaracteristicasCriar";
@@ -40,7 +40,7 @@ export default function DescCriar() {
         try {
             const receita = await criarReceita(dadosReceita)
             console.log("Dados completos da receita:", dadosReceita);
-            navigate("/Conta")
+            useNavigate("/Conta")
         } catch (erro) {
             console.log("Erro ao criar Receita:" + erro.message)
         }

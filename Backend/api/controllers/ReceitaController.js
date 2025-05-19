@@ -84,8 +84,18 @@ module.exports = {
         return res.status(400).json({ erro: 'ID do usuário é obrigatório' });
       }
       try {
-        const receitas = await Receita.find({ criador: userId }).populate('criador', { select: ['id', 'nome', 'usuario'] });
-        return res.json(receitas);
+        const receitas = await Receita.find({ criador: userId }).populate('criador');
+
+        const receitasFiltradas = receitas.map(r => ({
+          ...r,
+          criador: {
+            id: r.criador.id,
+            nome: r.criador.nome,
+            usuario: r.criador.usuario
+          }
+        }))
+
+        return res.json(receitasFiltradas);
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao buscar receitas', detalhes: error.message });
       }

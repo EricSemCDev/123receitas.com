@@ -5,8 +5,10 @@ import InfoPerfil from "../Components/ContaPage/InfoPerfil";
 import SessaoPost from "../Components/ContaPage/SessaoPost";
 import PopupEdit from "../Components/ContaPage/PopupEdit";
 import { buscarUsuarioLogado } from "../config/api";
+import { buscaReceitaID } from "../config/api";
 
 export default function Conta() {
+  const [receita, setReceita] = useState(null);
   const [usuario, setUsuario] = useState(null);
   const [mostrarPopup, setMostrarPopup] = useState(false);
   const [dadosAdicionais, setDadosAdicionais] = useState({
@@ -15,6 +17,9 @@ export default function Conta() {
     imagem: "",
     createdAt: ""
   });
+  const [dadosReceita, setDadosReceita] = useState({
+    
+  })
 
   // Função para buscar os dados do usuário logado
   async function carregarUsuario() {
@@ -26,8 +31,18 @@ export default function Conta() {
     }
   }
 
+  async function carregarReceitaUsuario() {
+    try {
+      const dados = await buscaReceitaID();
+      setReceita(dados);
+    } catch (erro) {
+      console.error("Erro ao carregar dados do usuário:", erro.message);
+    }
+  }
+
   useEffect(() => {
     carregarUsuario();
+    carregarReceitaUsuario();
   }, []);
 
   // Atualiza os dados locais quando o usuário muda
