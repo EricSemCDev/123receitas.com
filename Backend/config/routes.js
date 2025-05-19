@@ -14,6 +14,7 @@ module.exports.routes = {
   //Rotas Tabela Receita
   'POST /receita': 'ReceitaController.create',
   'GET /receita': 'ReceitaController.findAll',
+  'GET /receita/usuario/:id': 'ReceitaController.findAllByUser',
   'GET /receita/:id': 'ReceitaController.findOne',
   'GET /receita/detalhes/:id': 'ReceitaController.getById',
   'PUT /receita/:id': 'ReceitaController.update',

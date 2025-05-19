@@ -78,6 +78,18 @@ module.exports = {
         return res.status(500).json({ erro: 'Erro ao buscar receitas', detalhes: error.message });
       }
     },
+    findAllByUser: async function (req, res) {
+      const userId = req.params.id
+      if (!userId) {
+        return res.status(400).json({ erro: 'ID do usuário é obrigatório' });
+      }
+      try {
+        const receitas = await Receita.find({ criador: userId }).populate('criador', { select: ['id', 'nome', 'usuario'] });
+        return res.json(receitas);
+      } catch (error) {
+        return res.status(500).json({ erro: 'Erro ao buscar receitas', detalhes: error.message });
+      }
+    },
     // Buscar uma receita específica pelo ID
     findOne: async function (req, res) {
       try {

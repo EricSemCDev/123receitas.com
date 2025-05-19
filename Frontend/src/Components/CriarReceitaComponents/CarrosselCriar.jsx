@@ -15,7 +15,7 @@ export default function ImageCarousel({ images, setImages }) {
     const imageUrl = URL.createObjectURL(file);
 
     const newImages = [...images];
-    newImages[slotIndex] = imageUrl;
+    newImages[slotIndex] = file;
 
     setImages(newImages);
     setSelectedImage(imageUrl);
@@ -46,7 +46,16 @@ export default function ImageCarousel({ images, setImages }) {
         {completeImages.map((img, index) => (
           <div key={index} className="relative w-22 h-20 cursor-pointer rounded-lg transition-[scale brightness] duration-300 ease-in-out hover:scale-110">
             {img ? (
-              <img src={img} alt={`Thumbnail ${index + 1}`} className={`w-full h-full object-cover rounded-lg ${selectedImage === img ? "border-[#FF3700] border-3 brightness-80" : "border-1 border-[#FF7B00]"}`}onClick={() => setSelectedImage(img)}/>
+              <img
+                src={typeof img === "string" ? img : URL.createObjectURL(img)}
+                alt={`Thumbnail ${index + 1}`}
+                className={`w-full h-full object-cover rounded-lg ${
+                  selectedImage === img ? "border-[#FF3700] border-3 brightness-80" : "border-1 border-[#FF7B00]"
+                }`}
+                onClick={() => setSelectedImage(
+                  typeof img === "string" ? img : URL.createObjectURL(img)
+                )}
+              />
             ) : (
               <>
                 <label className="w-full h-full flex items-center justify-center cursor-pointer bg-[#FF7B00] rounded-lg hover:bg-[#FF3700] transition-all duration-300 ease-in-out transform">

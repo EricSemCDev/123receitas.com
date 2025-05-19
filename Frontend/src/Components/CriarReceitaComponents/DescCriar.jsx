@@ -1,5 +1,6 @@
 /* Dependências */
 import { useState } from "react";
+import { navigate } from "react-router-dom"
 /* Componentes */
 import CarrosselCriar from "./CarrosselCriar";
 import CaracterísticasCriar from "./CaracteristicasCriar";
@@ -29,7 +30,7 @@ export default function DescCriar() {
             tempoPreparo,
             porcoes,
             dificuldade,
-            categorias: categoriasSelecionadas,
+            categorias: categoriasSelecionadas.map (id => id.toString()),
             ingredientes: ingredientes.join(';'),
             modoPreparo: passos.join(';'),
             imagens: images,
@@ -37,8 +38,9 @@ export default function DescCriar() {
         };
         
         try {
-            //const receita = await criarReceita(dadosReceita)
+            const receita = await criarReceita(dadosReceita)
             console.log("Dados completos da receita:", dadosReceita);
+            navigate("/Conta")
         } catch (erro) {
             console.log("Erro ao criar Receita:" + erro.message)
         }

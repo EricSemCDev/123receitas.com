@@ -125,6 +125,7 @@ export async function criarReceita(dados) {
       formData.append('categorias', cat);
     });
 
+    console.log("Imagens a serem enviadas:", dados.imagens);
     dados.imagens.forEach(imagens => {
       formData.append('fotos', imagens);
     });
@@ -183,6 +184,19 @@ export async function editarReceita(dados) {
     return resultado;
   } catch (error) {
     throw error;
+  }
+}
+export async function buscaReceitaID() {
+  try {
+    const loggedUser = await buscarUsuarioLogado()
+
+    //Pelo id de loggedUser, cria bsuca em receita
+    const response = await fetch(`${API_BASE_URL}/receita/usuario?id=${loggedUser.id}`, {
+      method: 'GET',
+    })
+    return response
+  } catch (e) {
+    console.log(e)
   }
 }
 //Separar filtro a filtro ou função global e identar strings?
