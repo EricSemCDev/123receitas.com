@@ -217,3 +217,18 @@ export async function buscaReceitaNome(nomeReceita) {
     throw error;
   }
 }
+export async function buscarCategorias() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/categoria`);
+    const resultado = await response.json();
+
+    if (!response.ok) {
+      throw new Error(resultado.erro || 'Erro ao buscar categorias');
+    }
+
+    return resultado;
+  } catch (error) {
+    console.error("Erro ao buscar categorias:", error.message);
+    throw error;
+  }
+}
