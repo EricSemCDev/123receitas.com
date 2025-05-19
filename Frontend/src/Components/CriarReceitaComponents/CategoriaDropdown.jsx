@@ -1,29 +1,34 @@
-import { useState, useEffect } from "react";
-import { buscarCategorias } from "../../config/api"; // caminho conforme seu projeto
+import { useEffect, useState } from "react";
+import { buscarCategorias } from "../../config/api"; // Supondo que você tenha isso separado
 
 export default function CategoriaDropdown({ categoriasSelecionadas, setCategoriasSelecionadas }) {
-  const [categoriasDisponiveis, setCategoriasDisponiveis] = useState([]);
   const [aberto, setAberto] = useState(false);
+  const [categoriasDisponiveis, setCategoriasDisponiveis] = useState([]);
 
   useEffect(() => {
-    async function carregar() {
+    async function carregarCategorias() {
       try {
-        const nomes = await buscarCategorias();
-        setCategoriasDisponiveis(nomes);
+        const categorias = await buscarCategorias(); // [{ id: '1', nome_categoria: 'Doces' }, ...]
+        setCategoriasDisponiveis(categorias);
       } catch (erro) {
-        console.error("Erro ao carregar categorias:", erro);
+        console.error("Erro ao carregar categorias:", erro.message);
       }
     }
 
-    carregar();
+    carregarCategorias();
   }, []);
 
-  const toggleCategoria = (categoria) => {
+  const toggleCategoria = (id) => {
     setCategoriasSelecionadas((prev) =>
-      prev.includes(categoria)
-        ? prev.filter((c) => c !== categoria)
-        : [...prev, categoria]
+      prev.includes(id)
+        ? prev.filter((c) => c !== id)
+        : [...prev, id]
     );
+  };
+
+  const getNomeCategoria = (id) => {
+    const categoria = categoriasDisponiveis.find(c => c.id === id);
+    return categoria ? categoria.nome_categoria : "";
   };
 
   return (
@@ -34,26 +39,26 @@ export default function CategoriaDropdown({ categoriasSelecionadas, setCategoria
       >
         <p className="text-sm font-bold text-[#555555]">
           {categoriasSelecionadas.length > 0
-            ? categoriasSelecionadas.join(", ")
+            ? categoriasSelecionadas.map(getNomeCategoria).join(", ")
             : "Selecione as categorias"}
         </p>
       </div>
 
       {aberto && (
         <div className="absolute z-10 mt-1 w-60 rounded-md bg-white shadow-lg border border-gray-200 p-2 max-h-60 overflow-y-auto">
-          {categoriasDisponiveis.map((categoria) => {
-            const selecionada = categoriasSelecionadas.includes(categoria);
+          {categoriasDisponiveis.map(({ id, nome_categoria }) => {
+            const selecionada = categoriasSelecionadas.includes(id);
             return (
               <div
-                key={categoria}
-                onClick={() => toggleCategoria(categoria)}
+                key={id}
+                onClick={() => toggleCategoria(id)}
                 className={`cursor-pointer text-sm px-3 py-2 rounded mb-1 ${
                   selecionada
                     ? "bg-[#FF3700] text-white font-semibold transition-all duration-100 ease-in-out transform"
                     : "hover:bg-[#FF3700] hover:text-white text-gray-800 transition-all duration-100 ease-in-out transform"
                 }`}
               >
-                {categoria}
+                {nome_categoria}
               </div>
             );
           })}

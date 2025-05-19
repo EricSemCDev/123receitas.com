@@ -11,6 +11,7 @@ module.exports = {
           modo_preparo: req.body.modo_preparo,
           tempo_preparo: parseInt(req.body.tempo_preparo),
           dificuldade: parseInt(req.body.dificuldade),
+          porcoes: parseInt(req.body.porcoes),
           criador: req.body.criador,
           ingredientes: req.body.ingredientes
         }).fetch();

@@ -33,12 +33,12 @@ export default function DescCriar() {
             ingredientes: ingredientes.join(';'),
             modoPreparo: passos.join(';'),
             imagens: images,
-            criador: loggedUser.id
+            criador: loggedUser.id,
         };
         
         try {
-            const receita = await criarReceita(dadosReceita)
-            console.log("Dados completos da receita:", receita);
+            //const receita = await criarReceita(dadosReceita)
+            console.log("Dados completos da receita:", dadosReceita);
         } catch (erro) {
             console.log("Erro ao criar Receita:" + erro.message)
         }

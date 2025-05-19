@@ -17,9 +17,8 @@ module.exports = {
   
     findAll: async function (req, res) {
       try {
-        const categorias = await Categoria.find({ where: { nome_categoria: { '!=': null } } }).select(['nome_categoria']);
-        const nomes = categorias.map(cat => cat.nome_categoria);
-        return res.json(nomes);
+        const categorias = await Categoria.find().select(['id', 'nome_categoria']);
+        return res.json(categorias);
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao buscar categorias', detalhes: error.message });
       }

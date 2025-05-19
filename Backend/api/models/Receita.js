@@ -27,6 +27,11 @@ module.exports = {
       columnType: 'integer',
       required: true
     },
+    porcoes: {
+      type: 'number',
+      columnType: 'integer',
+      required: true
+    },
     acessos: {
       type: 'number',
       columnType: 'integer',

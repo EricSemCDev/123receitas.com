@@ -119,6 +119,7 @@ export async function criarReceita(dados) {
     formData.append('dificuldade', dados.dificuldade);
     formData.append('criador', dados.criador);
     formData.append('ingredientes', dados.ingredientes);
+    formData.append('porcoes', dados.porcoes);
 
     dados.categorias.forEach(cat => {
       formData.append('categorias', cat);
@@ -226,7 +227,9 @@ export async function buscarCategorias() {
       throw new Error(resultado.erro || 'Erro ao buscar categorias');
     }
 
-    return resultado;
+    const categoriasValidas = resultado.filter(c => c?.id && c?.nome_categoria);
+
+    return categoriasValidas;
   } catch (error) {
     console.error("Erro ao buscar categorias:", error.message);
     throw error;
