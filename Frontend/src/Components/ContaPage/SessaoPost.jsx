@@ -6,7 +6,7 @@ import { FaBook } from "react-icons/fa";
 import { FaCirclePlus } from "react-icons/fa6";
 
 
-export default function InfoPerfil() {
+export default function InfoPerfil({ dadosReceita }) {
     return (
      <section className="p-5 border-1 border-[#c9c9c9] shadow-lg flex flex-col space-y-4">
         <div className="flex justify-between items-center">
@@ -22,7 +22,7 @@ export default function InfoPerfil() {
             </Link>
         </div>
         <div className="flex items-center justify-between space-x-20 pt-12">
-          {receitas.map((receita) =>(
+          {dadosReceita.map((receita) =>( //is not a function
               <ReceitaCard key={receita.id} receita={receita} />
           ))}
         </div>

@@ -18,7 +18,19 @@ export default function Conta() {
     createdAt: ""
   });
   const [dadosReceita, setDadosReceita] = useState({
-    
+    id: "",
+    titulo: "",
+    descricao: "",
+    modo_preparo: "",
+    tempo_preparo: "",
+    porcoes: "",
+    dificuldade: "",
+    ingredientes: "",
+    criador: {
+      id: "",
+      nome: "",
+      usuario: "",
+    }
   })
 
   // Função para buscar os dados do usuário logado
@@ -34,7 +46,7 @@ export default function Conta() {
   async function carregarReceitaUsuario() {
     try {
       const dados = await buscaReceitaID();
-      setReceita(dados);
+      setDadosReceita(dados);
     } catch (erro) {
       console.error("Erro ao carregar dados do usuário:", erro.message);
     }
@@ -57,6 +69,26 @@ export default function Conta() {
     }
   }, [usuario]);
 
+  useEffect(() => {
+    if (receita) {
+      setDadosReceita({
+        id: receita.id,
+        titulo: receita.titulo,
+        descricao: receita.descricao,
+        modo_preparo: receita.modo_preparo,
+        tempo_preparo: receita.tempo_preparo,
+        porcoes: receita.porcoes,
+        dificuldade: receita.dificuldade,
+        ingredientes: receita.ingredientes,
+        criador: {
+          id: receita.criador.id,
+          nome: receita.criador.nome,
+          usuario: receita.criador.usuario,
+        }
+      });
+    }
+  }, [receita]);
+
   return (
     <div className="">
       <Navbar />
@@ -71,7 +103,9 @@ export default function Conta() {
             )}
           </div>
           <div className="w-2/3">
-            <SessaoPost />
+            <SessaoPost
+              dadosReceita={dadosReceita}
+            />
           </div>
         </div>
       </div>
