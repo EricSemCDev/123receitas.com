@@ -85,7 +85,7 @@ export default function Conta() {
               />
             )}
           </div>
-          <div className="w-2/3">
+          <div className="w-4/5">
             <SessaoPost
               dadosReceita={dadosReceita}
             />

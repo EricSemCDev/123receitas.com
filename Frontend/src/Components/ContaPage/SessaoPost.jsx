@@ -7,11 +7,11 @@ import { FaCirclePlus } from "react-icons/fa6";
 
 
 export default function SessaoPost({ dadosReceita }) {
-    console.log("dadosReceita:", dadosReceita)
     return (
      <section className="p-5 border-1 border-[#c9c9c9] shadow-lg flex flex-col space-y-4">
+
         <div className="flex justify-between items-center">
-          
+    
             <div className="px-2 space-x-1 h-12 mt-2 rounded-xl flex justify-center items-center bg-[#FF7B00]">
               <FaBook className="text-white font-semibold text-xl"/>
               <p className="text-white font-semibold text-xl">Posts</p>
@@ -21,12 +21,15 @@ export default function SessaoPost({ dadosReceita }) {
                 <FaCirclePlus  className="text-white text-xl"/>
                 <p className="text-white font-semibold text-xl">Criar Post</p>
             </Link>
+
         </div>
-        <div className="flex items-center justify-between space-x-20 pt-12">
+
+        <div className="flex justify-between flex-wrap gap-5">
           {Array.isArray(dadosReceita) && dadosReceita.map((receita) => (
             <ReceitaCard key={receita.id} receita={receita} />
           ))}
         </div>
+
      </section>
     );
   }
