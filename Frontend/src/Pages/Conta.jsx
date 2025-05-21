@@ -17,7 +17,7 @@ export default function Conta() {
     imagem: "",
     createdAt: ""
   });
-  const [dadosReceita, setDadosReceita] = useState({
+  const [dadosReceita, setDadosReceita] = useState([{
     id: "",
     titulo: "",
     descricao: "",
@@ -25,13 +25,16 @@ export default function Conta() {
     tempo_preparo: "",
     porcoes: "",
     dificuldade: "",
+    categorias: [],
     ingredientes: "",
+    imagens: [],
     criador: {
       id: "",
       nome: "",
       usuario: "",
+      user_foto: "",
     }
-  })
+  }])
 
   // Função para buscar os dados do usuário logado
   async function carregarUsuario() {
@@ -68,26 +71,6 @@ export default function Conta() {
       });
     }
   }, [usuario]);
-
-  useEffect(() => {
-    if (receita) {
-      setDadosReceita({
-        id: receita.id,
-        titulo: receita.titulo,
-        descricao: receita.descricao,
-        modo_preparo: receita.modo_preparo,
-        tempo_preparo: receita.tempo_preparo,
-        porcoes: receita.porcoes,
-        dificuldade: receita.dificuldade,
-        ingredientes: receita.ingredientes,
-        criador: {
-          id: receita.criador.id,
-          nome: receita.criador.nome,
-          usuario: receita.criador.usuario,
-        }
-      });
-    }
-  }, [receita]);
 
   return (
     <div className="">

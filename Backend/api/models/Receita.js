@@ -74,7 +74,7 @@ module.exports = {
     //===========================================================
     fotos: {
       collection: 'ReceitaFoto',
-      via: 'receita'
+      via: 'receita',
     },
     categorias: {
       collection: 'ReceitaCategorias',

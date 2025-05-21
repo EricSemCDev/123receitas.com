@@ -15,7 +15,7 @@ export default function Características() {
         <div className="space-y-2 pl-3">
             <div className="flex items-center space-x-1">
                 <p className="font-light text-sm">Tempo de Preparo:</p>
-                <p className="font-bold text-sm text-[#555555]">{receita.TempoPreparo + "min"}</p>
+                <p className="font-bold text-sm text-[#555555]">{receita.tempo_preparo + "min"}</p>
             </div>
             <div className="flex items-center space-x-1">
                 <p className="font-light text-sm">Dificuldade:</p>
@@ -28,7 +28,7 @@ export default function Características() {
             </div>
             <div className="flex items-center space-x-1">
                 <p className="font-light text-sm">Porções:</p>
-                <p className="font-bold text-sm text-[#555555]">{receita.porcao}</p>
+                <p className="font-bold text-sm text-[#555555]">{receita.porcoes}</p>
             </div>
         </div>
      </section>

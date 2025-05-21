@@ -79,23 +79,71 @@ module.exports = {
       }
     },
     findAllByUser: async function (req, res) {
-      const userId = req.params.id
+      const userId = req.params.id;
       if (!userId) {
         return res.status(400).json({ erro: 'ID do usuário é obrigatório' });
       }
+
       try {
-        const receitas = await Receita.find({ criador: userId }).populate('criador');
+        // 1. Buscar receitas com populates diretos
+        const receitas = await Receita.find({ criador: userId })
+          .populate('criador')
+          .populate('categorias')  // vai conter array de objetos com categoria: ID
+          .populate('fotos');      // vai conter array de imagens
 
-        const receitasFiltradas = receitas.map(r => ({
-          ...r,
-          criador: {
-            id: r.criador.id,
-            nome: r.criador.nome,
-            usuario: r.criador.usuario
-          }
-        }))
+        // 2. Buscar todas as categorias referenciadas
+        const categoriaIds = [
+          ...new Set(
+            receitas.flatMap(r =>
+              r.categorias.map(c => c.categoria)
+            )
+          )
+        ];
 
-        return res.json(receitasFiltradas);
+        const categoriasCompletas = await Categoria.find({ id: categoriaIds });
+        const categoriasPorId = {};
+        categoriasCompletas.forEach(c => {
+          categoriasPorId[c.id] = c.nome_categoria;
+        });
+
+        // 3. Buscar a imagem do usuário
+        const userFoto = await User_Foto.findOne({ usuario: userId });
+        const userFotoBase64 = userFoto?.user_foto?.toString('base64') || null;
+
+        // 4. Montar resultado final
+        const receitasCompletas = receitas.map(r => {
+          const nomesCategorias = r.categorias
+            .map(c => categoriasPorId[c.categoria])
+            .filter(Boolean);
+
+          const imagensBase64 = r.fotos.map(f => f.receita_foto.toString('base64'));
+
+          return {
+            id: r.id,
+            titulo: r.titulo,
+            descricao: r.descricao,
+            modo_preparo: r.modo_preparo,
+            tempo_preparo: r.tempo_preparo,
+            porcoes: r.porcoes,
+            dificuldade: r.dificuldade,
+            ingredientes: r.ingredientes,
+            acessos: r.acessos,
+            createdAt: r.createdAt,
+            updatedAt: r.updatedAt,
+
+            criador: {
+              id: r.criador.id,
+              nome: r.criador.nome,
+              usuario: r.criador.usuario,
+            },
+
+            categorias: nomesCategorias,
+            imagens: imagensBase64,
+            user_foto: userFotoBase64
+          };
+        });
+
+        return res.json(receitasCompletas);
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao buscar receitas', detalhes: error.message });
       }

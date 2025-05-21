@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 export default function ModoPreparo() {
     const location = useLocation();
     const receita = location.state?.receita;
-    const modoPreparo = receita?.modoPreparo?.split(";").map((item) => item.trim()).filter((item) => item.length > 0);
+    const modoPreparo = receita?.modo_preparo?.split(";").map((item) => item.trim()).filter((item) => item.length > 0);
 
     return (
      <section className="">

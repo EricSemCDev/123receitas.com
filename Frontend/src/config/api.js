@@ -191,12 +191,16 @@ export async function buscaReceitaID() {
     const loggedUser = await buscarUsuarioLogado()
 
     //Pelo id de loggedUser, cria bsuca em receita
-    const response = await fetch(`${API_BASE_URL}/receita/usuario?id=${loggedUser.id}`, {
+    const response = await fetch(`${API_BASE_URL}/receita/usuario/${loggedUser.id}`, {
       method: 'GET',
     })
-    return response
+    if(!response.ok) {
+      throw new Error(`Erro ao buscar receitas: ${response.status}`)
+    }
+    const data = await response.json()
+    return data
   } catch (e) {
-    console.log(e)
+    console.error(e)
   }
 }
 //Separar filtro a filtro ou função global e identar strings?

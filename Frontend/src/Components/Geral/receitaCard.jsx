@@ -34,12 +34,12 @@ export default function receitaCard({ receita }) {
                 {/* Tempo de Preparo */}
                 <div className="bg-gradient-to-r from-[#FF7B00] to-[#FF3700] font-semibold text-xs w-19 h-5 flex items-center justify-center space-x-2 rounded-xl border-1 border-[#c9c9c9]">
                     <BsAlarmFill className="text-white" />
-                    <p className="text-white">{receita?.TempoPreparo + "min" || "0min"}</p>
+                    <p className="text-white">{receita?.tempo_preparo + "min" || "0min"}</p>
                 </div>
 
                 {/* Imagem do autor */}
                 <div className="w-10 h-10 rounded-full border-2 border-white">
-                    <img src={receita?.ImagemA} alt="IMG" className="w-full h-full object-cover rounded-full" />
+                    <img src={receita?.user_foto} alt="IMG" className="w-full h-full object-cover rounded-full" />
                 </div>  
 
             </div>

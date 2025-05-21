@@ -1,14 +1,12 @@
 /* Dependencias */
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function ImageCarousel() {
   /* Variaveis da Pagina */
-  const images = [
-    "../src/assets/arroz-colorido.jpeg",
-    "../src/assets/image.png",
-    "../src/assets/linda.png",   
-    "../src/assets/salada-com-ovo.jpeg",
-  ]; // Aqui entra o fetch real depois
+  const location = useLocation();
+  const receita = location.state?.receita;
+  const images = receita.imagens
   
   const [selectedImage, setSelectedImage] = useState(images[0]);
 
