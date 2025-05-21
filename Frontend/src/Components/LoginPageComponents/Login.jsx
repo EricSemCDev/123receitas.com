@@ -25,7 +25,7 @@ export default function Login() {
         console.log("Login realizado")
         console.log(userLogged.token)
         //Trocar para MainPage
-        navigate("/Conta")
+        navigate("/")
       }
     } catch(e) {
       console.log(e.message)

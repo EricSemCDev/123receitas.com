@@ -1,16 +1,30 @@
 /* Dependencias */
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { buscarUsuarioLogado } from "../../config/api";
 
 /* Icons */
 import { IoMdPerson } from "react-icons/io";
 
 export default function Navbar() {
   /* Variaveis da pagina */
+  const [usuario, setUsuario] = useState(null);
+
+  async function carregarUsuario() {
+    try {
+      const dados = await buscarUsuarioLogado();
+      setUsuario(dados);
+    } catch (erro) {
+      console.error("Erro ao carregar dados do usuário:", erro.message);
+    }
+  }
+
+  useEffect(() => {
+    carregarUsuario();
+  }, []);
+
   const RotaLogin = "/login";
   const RotaCadastro = "/cadastro";
-
-
 
   /* Variaveis DropDown */
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -57,20 +71,52 @@ export default function Navbar() {
         {/* Ícone do usuário e dropdown */}
         <div className="relative" ref={dropdownRef}>
           {/* Botão de Perfil */}
-          <button onClick={toggleDropdown} aria-expanded={dropdownOpen} role="button" className="cursor-pointer group w-10 h-10 flex items-center justify-center rounded-full bg-white border border-[#c9c9c9] shadow transition-colors duration-200 hover:bg-[#FF7B00]"><IoMdPerson className="text-3xl text-[#585858] group-hover:text-white transition-colors duration-200" /></button>
+          <button onClick={toggleDropdown} aria-expanded={dropdownOpen} role="button" className="cursor-pointer group w-10 h-10 flex items-center justify-center rounded-full bg-white border border-[#c9c9c9] shadow transition-colors duration-200 hover:bg-[#FF7B00]">{usuario?.imagem ? (
+            <img
+                src={usuario.imagem}
+                alt="Foto de perfil"
+                className="w-full h-full rounded-full object-cover"
+              />
+            ) : (
+              <IoMdPerson className="text-3xl text-[#585858] group-hover:text-white transition-colors duration-200" />
+            )}
+          </button>
 
           {/* Dropdown */}
           {dropdownOpen && (
             <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white shadow-lg rounded-lg border border-[#c9c9c9] z-10">
               <ul className="text-sm text-gray-700">
-                {/* Linha de Login */}
-                <li>
-                  <Link to={RotaLogin} onClick={() => setDropdownOpen(false)} className="block px-4 py-2 rounded-t-lg hover:bg-[#FF7B00] hover:text-white">Login</Link>
-                </li>
-                {/* Linha de Cadastro */}
-                <li>
-                  <Link to={RotaCadastro} onClick={() => setDropdownOpen(false)} className="block px-4 py-2 rounded-b-lg hover:bg-[#FF7B00] hover:text-white">Cadastro</Link>
-                </li>
+                {usuario ? (
+                  <>
+                    <li>
+                      <Link to="/conta" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 rounded-t-lg hover:bg-[#FF7B00] hover:text-white">
+                        Minha Conta
+                      </Link>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => {
+                          localStorage.removeItem("token"); // ou o que você usar para login
+                          setUsuario(null); // limpa o estado
+                          setDropdownOpen(false);
+                          navigate("/login");
+                        }}
+                        className="w-full text-left block px-4 py-2 rounded-b-lg hover:bg-[#FF7B00] hover:text-white"
+                      >
+                        Sair
+                      </button>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li>
+                      <Link to={RotaLogin} onClick={() => setDropdownOpen(false)} className="block px-4 py-2 rounded-t-lg hover:bg-[#FF7B00] hover:text-white">Login</Link>
+                    </li>
+                    <li>
+                      <Link to={RotaCadastro} onClick={() => setDropdownOpen(false)} className="block px-4 py-2 rounded-b-lg hover:bg-[#FF7B00] hover:text-white">Cadastro</Link>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
           )}
