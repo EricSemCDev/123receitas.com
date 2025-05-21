@@ -3,6 +3,7 @@ module.exports.routes = {
   'POST /usuario': 'UsuarioController.create',
   'GET /usuario': 'UsuarioController.findAll',
   'GET /usuario/:id': 'UsuarioController.findOne',
+  'GET /usuario/:id/foto': 'UsuarioController.foto',
   'PUT /usuario/:id': 'UsuarioController.update',
   'DELETE /usuario/:id': 'UsuarioController.delete',
   
@@ -14,6 +15,7 @@ module.exports.routes = {
   //Rotas Tabela Receita
   'POST /receita': 'ReceitaController.create',
   'GET /receita': 'ReceitaController.findAll',
+  'GET /receita/foto/:id': 'ReceitaFotoController.foto',
   'GET /receita/usuario/:id': 'ReceitaController.findAllByUser',
   'GET /receita/:id': 'ReceitaController.findOne',
   'GET /receita/detalhes/:id': 'ReceitaController.getById',

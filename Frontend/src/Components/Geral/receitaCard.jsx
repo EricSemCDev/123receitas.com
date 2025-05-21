@@ -14,9 +14,8 @@ export default function receitaCard({ receita }) {
         
         {/* Imagem da receita */}
         <div className="w-full h-1/2">
-            <img src={receita?.imagemR || "./src/assets/salada-com-ovo.jpeg"} alt={receita?.titulo || "ERRO"} className="w-full h-full object-cover rounded-t-xl"/>
+            <img src={receita?.imagens?.[0] || "./src/assets/salada-com-ovo.jpeg"} alt={receita?.titulo || "ERRO"} className="w-full h-full object-cover rounded-t-xl"/>
         </div>
-
         
         <div className="w-full h-1/2 bg-white p-3 rounded-b-xl">
             {/* Nome da Receita */}

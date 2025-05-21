@@ -108,7 +108,7 @@ module.exports = {
 
         // 3. Buscar a imagem do usuário
         const userFoto = await User_Foto.findOne({ usuario: userId });
-        const userFotoBase64 = userFoto?.user_foto?.toString('base64') || null;
+        const userFotoUrl = userFoto ? `http://localhost:1337/usuario/${userId}/foto` : null;
 
         // 4. Montar resultado final
         const receitasCompletas = receitas.map((r) => {
@@ -128,20 +128,7 @@ module.exports = {
             .filter(Boolean);
 
           // Validação e debug das fotos
-          const imagensBase64 = (r.fotos || [])
-            .map((f) => {
-              if (!f.receita_foto) {
-                console.warn(`Foto vazia para receita ${r.id}`, f);
-                return null;
-              }
-              try {
-                return f.receita_foto.toString('base64');
-              } catch (e) {
-                console.error(`Erro ao converter imagem para base64 na receita ${r.id}:`, e);
-                return null;
-              }
-            })
-            .filter(Boolean);
+          const imagens = (r.fotos || []).map((f) => `http://localhost:1337/receita/foto/${f.id}`);
 
           return {
             id: r.id,
@@ -163,12 +150,12 @@ module.exports = {
             },
 
             categorias: nomesCategorias,
-            imagens: imagensBase64,
-            user_foto: userFotoBase64,
+            imagens: imagens,
+            user_foto: userFotoUrl,
           };
         });
 
-        return res.json(receitasCompletas);
+        return res.json(receitasCompletas); 
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao buscar receitas', detalhes: error.message });
       }

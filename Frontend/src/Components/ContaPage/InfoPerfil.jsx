@@ -11,11 +11,7 @@ export default function InfoPerfil({ onEditar, dadosAdicionais }) {
       {/* Imagem de Perfil */}
       <div className="w-full h-1/2">
         <img
-          src={
-            dadosAdicionais.imagem
-              ? `data:image/jpeg;base64,${dadosAdicionais.imagem}`
-              : "/default-avatar.png"
-          }
+          src={`http://localhost:1337/usuario/${dadosAdicionais.id}/foto`}
           alt="Imagem de perfil"
           className="w-full h-full object-cover border-2 border-[#FF7B00]"
         />
@@ -25,7 +21,7 @@ export default function InfoPerfil({ onEditar, dadosAdicionais }) {
       <div className="w-full flex justify-between items-center">
         <p className="font-semibold text-2xl">{dadosAdicionais.nome}</p>
         <button onClick={onEditar}>
-          <FaPencil className="text-xl" />
+          <FaPencil className="text-xl cursor-pointer" />
         </button>
       </div>
 

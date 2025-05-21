@@ -27,6 +27,12 @@ module.exports = {
       );
 
       const { senha: _, ...usuarioSemSenha } = usuario;
+
+      const foto = await User_Foto.findOne({ usuario: usuario.id });
+      usuarioSemSenha.imagem = foto
+        ? `http://localhost:1337/usuario/${usuario.id}/foto`
+        : null;
+
       return res.json({ token, usuario: usuarioSemSenha });
     } catch (err) {
       return res.status(500).json({ erro: 'Erro ao realizar login.', detalhes: err.message });
@@ -40,14 +46,10 @@ module.exports = {
         return res.status(404).json({ erro: 'Usuário não encontrado.' });
       }
 
-      // Buscar imagem do usuário
       const foto = await User_Foto.findOne({ usuario: req.usuario.id });
-      // Se existir a imagem, convertê-la para Base64
-      if (foto && foto.user_foto) {
-        usuario.imagem = Buffer.from(foto.user_foto).toString('base64');
-      } else {
-        usuario.imagem = null;
-      }
+      usuario.imagem = foto
+        ? `http://localhost:1337/usuario/${req.usuario.id}/foto`
+        : null;
 
       return res.json(usuario);
     } catch (err) {

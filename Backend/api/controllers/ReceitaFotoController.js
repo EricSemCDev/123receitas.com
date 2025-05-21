@@ -57,6 +57,21 @@ module.exports = {
         } catch (error) {
           return res.status(500).json({ erro: 'Erro ao buscar fotos', detalhes: error.message });
         }
+    },
+    foto: async function (req, res) {
+    try {
+      const idFoto = req.params.id;
+      const foto = await ReceitaFoto.findOne({ id: idFoto });
+
+      if (!foto || !foto.receita_foto) {
+        return res.status(404).send("Foto da receita não encontrada.");
+      }
+
+      res.set("Content-Type", "image/jpeg"); // ou image/png se for o caso
+      return res.send(foto.receita_foto);
+    } catch (error) {
+      return res.status(500).json({ erro: "Erro ao buscar imagem da receita", detalhes: error.message });
     }
+  }
   };
   

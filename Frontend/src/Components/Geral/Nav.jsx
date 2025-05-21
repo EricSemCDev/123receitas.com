@@ -20,7 +20,7 @@ export default function Navbar() {
   }
 
   useEffect(() => {
-    carregarUsuario();
+      carregarUsuario();
   }, []);
 
   const RotaLogin = "/login";
@@ -73,7 +73,7 @@ export default function Navbar() {
           {/* Botão de Perfil */}
           <button onClick={toggleDropdown} aria-expanded={dropdownOpen} role="button" className="cursor-pointer group w-10 h-10 flex items-center justify-center rounded-full bg-white border border-[#c9c9c9] shadow transition-colors duration-200 hover:bg-[#FF7B00]">{usuario?.imagem ? (
             <img
-                src={usuario.imagem}
+                src={`http://localhost:1337/usuario/${usuario.id}/foto`}
                 alt="Foto de perfil"
                 className="w-full h-full rounded-full object-cover"
               />
@@ -99,7 +99,7 @@ export default function Navbar() {
                           localStorage.removeItem("token"); // ou o que você usar para login
                           setUsuario(null); // limpa o estado
                           setDropdownOpen(false);
-                          navigate("/login");
+                          navigate("/");
                         }}
                         className="w-full text-left block px-4 py-2 rounded-b-lg hover:bg-[#FF7B00] hover:text-white"
                       >

@@ -12,6 +12,7 @@ export default function Conta() {
   const [usuario, setUsuario] = useState(null);
   const [mostrarPopup, setMostrarPopup] = useState(false);
   const [dadosAdicionais, setDadosAdicionais] = useState({
+    id: "",
     nome: "",
     usuario: "",
     imagem: "",
@@ -50,6 +51,7 @@ export default function Conta() {
     try {
       const dados = await buscaReceitaID();
       setDadosReceita(dados);
+      console.log(dados);
     } catch (erro) {
       console.error("Erro ao carregar dados do usuário:", erro.message);
     }
@@ -64,6 +66,7 @@ export default function Conta() {
   useEffect(() => {
     if (usuario) {
       setDadosAdicionais({
+        id: usuario.id,
         nome: usuario.nome,
         usuario: usuario.usuario,
         imagem: usuario.imagem,

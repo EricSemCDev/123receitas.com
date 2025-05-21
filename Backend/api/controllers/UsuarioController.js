@@ -127,6 +127,22 @@ module.exports = {
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao deletar usuário', detalhes: error.message });
       }
+    },
+
+    foto: async function (req, res) {
+    try {
+      const userId = req.params.id;
+      const foto = await User_Foto.findOne({ usuario: userId });
+
+      if (!foto || !foto.user_foto) {
+        return res.status(404).send("Foto não encontrada.");
+      }
+
+      res.set("Content-Type", "image/jpeg"); // ou image/png se preferir
+      return res.send(foto.user_foto);
+    } catch (error) {
+      return res.status(500).json({ erro: "Erro ao buscar imagem", detalhes: error.message });
     }
+  }
   };
   
