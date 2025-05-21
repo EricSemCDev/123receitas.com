@@ -111,12 +111,37 @@ module.exports = {
         const userFotoBase64 = userFoto?.user_foto?.toString('base64') || null;
 
         // 4. Montar resultado final
-        const receitasCompletas = receitas.map(r => {
-          const nomesCategorias = r.categorias
-            .map(c => categoriasPorId[c.categoria])
+        const receitasCompletas = receitas.map((r) => {
+          // Validação e debug das categorias
+          const nomesCategorias = (r.categorias || [])
+            .map((c) => {
+              if (!c.categoria) {
+                console.warn(`Categoria vazia para receita ${r.id}`, c);
+                return null;
+              }
+              const nome = categoriasPorId[c.categoria];
+              if (!nome) {
+                console.warn(`Categoria ${c.categoria} não encontrada no dicionário`);
+              }
+              return nome;
+            })
             .filter(Boolean);
 
-          const imagensBase64 = r.fotos.map(f => f.receita_foto.toString('base64'));
+          // Validação e debug das fotos
+          const imagensBase64 = (r.fotos || [])
+            .map((f) => {
+              if (!f.receita_foto) {
+                console.warn(`Foto vazia para receita ${r.id}`, f);
+                return null;
+              }
+              try {
+                return f.receita_foto.toString('base64');
+              } catch (e) {
+                console.error(`Erro ao converter imagem para base64 na receita ${r.id}:`, e);
+                return null;
+              }
+            })
+            .filter(Boolean);
 
           return {
             id: r.id,
@@ -132,14 +157,14 @@ module.exports = {
             updatedAt: r.updatedAt,
 
             criador: {
-              id: r.criador.id,
-              nome: r.criador.nome,
-              usuario: r.criador.usuario,
+              id: r.criador?.id,
+              nome: r.criador?.nome,
+              usuario: r.criador?.usuario,
             },
 
             categorias: nomesCategorias,
             imagens: imagensBase64,
-            user_foto: userFotoBase64
+            user_foto: userFotoBase64,
           };
         });
 
