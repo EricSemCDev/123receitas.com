@@ -5,9 +5,10 @@ module.exports = {
           receita: req.body.receita,
           categoria: req.body.categoria
         }).fetch();
-  
+
         return res.status(201).json(novaAssociacao);
       } catch (error) {
+        console.error(error); // <- Adiciona isso aqui
         return res.status(500).json({ erro: 'Erro ao criar associação', detalhes: error.message });
       }
     },

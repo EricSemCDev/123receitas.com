@@ -23,6 +23,7 @@ module.exports.routes = {
   'DELETE /receita/:id': 'ReceitaController.delete',
 
   //Rotas Tabela ReceitaFoto
+  'POST /receita_foto': 'ReceitaFotoController.create',
   'PUT /receita_foto/:id': 'ReceitaFotoController.update',
   'GET /receita_foto/:id': 'ReceitaFotoController.findAll',
 
@@ -41,4 +42,6 @@ module.exports.routes = {
   //Rotas AuthController
   'POST /auth/login': 'AuthController.login',
   'GET /auth/me': 'AuthController.me',
+
+  'POST /upload': 'UploadController.testeUpload',
 };

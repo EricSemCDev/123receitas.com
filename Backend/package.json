@@ -21,11 +21,13 @@
     "skipper-disk": "^0.5.12"
   },
   "devDependencies": {
-    "eslint": "5.16.0"
+    "eslint": "5.16.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.1.1"
   },
   "scripts": {
     "start": "NODE_ENV=production node app.js",
-    "test": "npm run lint && npm run custom-tests && echo 'Done.'",
+    "test": "jest --coverage",
     "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
     "custom-tests": "echo \"(No other custom tests yet.)\" && echo"
   },

@@ -1,15 +1,17 @@
 module.exports = {
     create: async function (req, res) {
       try {
-        if (!req.body.receita || !req.body.foto) {
+        const Receita_Foto = sails.models.receitafoto;
+
+        if (!req.body.receita || !req.body.receita_foto) {
           return res.status(400).json({ erro: 'ID da receita e a foto são obrigatórios' });
         }
-    
+
         const novaFoto = await Receita_Foto.create({
           receita: req.body.receita,
-          receita_foto: Buffer.from(req.body.foto, 'base64')
+          receita_foto: Buffer.from(req.body.receita_foto, 'base64')
         }).fetch();
-    
+
         return res.status(201).json(novaFoto);
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao adicionar foto', detalhes: error.message });
@@ -17,6 +19,7 @@ module.exports = {
     },
     update: async function (req, res) {
       try {
+        const Receita_Foto = sails.models.receitafoto;
         const receitaId = req.params.id;
         if (!req.body.receita_foto) {
           return res.status(400).json({ erro: 'Foto obrigatória' });
@@ -40,6 +43,7 @@ module.exports = {
   
     findAll: async function (req, res) {
         try {
+          const Receita_Foto = sails.models.receitafoto;
           const receitaId = req.params.id;
     
           const fotos = await Receita_Foto.find({ receita: receitaId });
@@ -60,6 +64,7 @@ module.exports = {
     },
     foto: async function (req, res) {
     try {
+      const Receita_Foto = sails.models.receitafoto;
       const idFoto = req.params.id;
       const foto = await ReceitaFoto.findOne({ id: idFoto });
 

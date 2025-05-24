@@ -9,7 +9,7 @@ module.exports = {
         return res.serverError(err);
       }
       if (!uploadedFiles || uploadedFiles.length === 0) {
-        return res.badRequest('Nenhuma imagem foi enviada.');
+        return res.badRequest({ message: 'Nenhuma imagem foi enviada.' });
       }
       return res.json({
         message: 'Upload realizado com sucesso!',
