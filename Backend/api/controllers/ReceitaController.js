@@ -75,9 +75,64 @@ module.exports = {
     // Buscar todas as receitas
     findAll: async function (req, res) {
       try {
-        const receitas = await Receita.find().populate('criador'); // inclui dados do criador
-        return res.json(receitas);
+        const receitas = await Receita.find()
+          .populate('criador')
+          .populate('fotos')
+          .populate('categorias');
+
+        const categoriaIds = [
+          ...new Set(
+            receitas.flatMap(r =>
+              r.categorias.map(c => c.categoria)
+            )
+          )
+        ];
+
+        const categoriasCompletas = await Categoria.find({ id: categoriaIds });
+        const categoriasPorId = {};
+        categoriasCompletas.forEach(c => {
+          categoriasPorId[c.id] = c.nome_categoria;
+        });
+
+        const userFoto = await User_Foto.findOne({ usuario: userId });
+        const userFotoUrl = userFoto ? `http://localhost:1337/usuario/${r.criador}/foto` : null;
+
+        const receitasCompletas = receitas.map((r) => {
+          // Validação e debug das categorias
+          const nomesCategorias = (r.categorias || [])
+            .map((c) => {
+              if (!c.categoria) {
+                console.warn(`Categoria vazia para receita ${r.id}`, c);
+                return null;
+              }
+              const nome = categoriasPorId[c.categoria];
+              if (!nome) {
+                console.warn(`Categoria ${c.categoria} não encontrada no dicionário`);
+              }
+              return nome;
+            })
+            .filter(Boolean);
+
+          // Validação e debug das fotos
+          const imagens = (r.fotos || []).map((f) => `http://localhost:1337/receita/foto/${f.id}`);
+
+          return {
+            id: r.id,
+            titulo: r.titulo,
+            dificuldade: r.dificuldade,
+            tempo_preparo: r.tempo_preparo,
+            user_foto: userFotoUrl || "Nada", //falta esse
+            imagemReceita: imagens[0],
+            categorias: nomesCategorias,
+            porcoes: r.porcoes,
+            ingredientes: r.ingredientes,
+            modo_preparo: r.modo_preparo,
+          };
+        });
+
+        return res.json(receitasCompletas);
       } catch (error) {
+        console.error('Erro ao buscar receitas:', error);
         return res.status(500).json({ erro: 'Erro ao buscar receitas', detalhes: error.message });
       }
     },
@@ -271,7 +326,7 @@ module.exports = {
 
         const resultado = await Receita.getDatastore().sendNativeQuery(
           `
-            SELECT * FROM receitas
+            SELECT * FROM "Receita"
             WHERE titulo ILIKE $1
           `,
           [`%${query}%`]

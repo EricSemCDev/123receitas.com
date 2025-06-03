@@ -186,6 +186,19 @@ export async function editarReceita(dados) {
     throw error;
   }
 }
+export async function buscaTodasReceitas() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/receita/todas`, {
+      method: 'GET'
+    })
+
+    const resultado = await response.json()
+
+    return resultado
+  } catch (error) {
+    throw error;
+  }
+}
 export async function buscaReceitaID() {
   try {
     const loggedUser = await buscarUsuarioLogado()
@@ -223,7 +236,7 @@ export async function filtrarReceita(filtros) {
 }
 export async function buscaReceitaNome(nomeReceita) {
   try {
-    const response = await fetch(`${API_BASE_URL}/receitas/busca/${encodeURIComponent(nomeReceita)}`);
+    const response = await fetch(`${API_BASE_URL}/receitas/buscar?query=${encodeURIComponent(nomeReceita)}`);
 
     const resultado = await response.json();
 

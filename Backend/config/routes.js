@@ -14,7 +14,7 @@ module.exports.routes = {
 
   //Rotas Tabela Receita
   'POST /receita': 'ReceitaController.create',
-  'GET /receita': 'ReceitaController.findAll',
+  'GET /receita/todas': 'ReceitaController.findAll',
   'GET /receita/foto/:id': 'ReceitaFotoController.foto',
   'GET /receita/usuario/:id': 'ReceitaController.findAllByUser',
   'GET /receita/:id': 'ReceitaController.findOne',
@@ -22,7 +22,7 @@ module.exports.routes = {
   'PUT /receita/:id': 'ReceitaController.update',
   'DELETE /receita/:id': 'ReceitaController.delete',
   'GET /receita/filtro': 'ReceitaController.filtro',
-  'GET /receitas/busca': 'ReceitaController.buscar',
+  'GET /receitas/buscar': 'ReceitaController.buscar',
 
   //Rotas Tabela ReceitaFoto
   'PUT /receita_foto/:id': 'ReceitaFotoController.update',

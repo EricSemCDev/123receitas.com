@@ -3,15 +3,10 @@ import { useState, useEffect } from "react";
 
 /* Componentes */
 import ReceitaCard from "../Geral/receitaCard";
-import modoPreparo from "../ReceitaDescComponents/modo-preparo";
 
 export default function ReceitasPopulares() {
     /* Variaveis da pagina */
-    const retornoBancoReceitas = [
-      { id: 1, tituloReceita: "Butter Chicken", imagemReceita: "./src/assets/image.png", dificuldadeReceita: 5, TempoPreparoReceita: "10", ImagemAutor: "./src/assets/linda.png", Categorias: ["Salgados", "Bebidas"], Porcoes: 1, Ingredientes: "1 ovo;4 colheres de sopa de óleo;7 colheres de sopa de farinha de trigo;3 colheres de sopa de leite;5 colheres de sopa de açúcar;1 colher de sopa de fermento em pó", ModoPreparo: "Em uma tigela coloque todos os ingredientes e misture bem.;Distribua a massa em duas canecas já untadas e leve para a Air Fryer Mondial em 180º por 10 a 15 minutos.;Retire da Air Fryer com cuidado e incremente com a cobertura que você preferir, com doces, pasta de amendoim, geleias, caldas, castanhas e o que mais você desejar."},
-      { id: 2, tituloReceita: "Brigadeiro", imagemReceita: "brigadeiro.jpg", dificuldadeReceita: 2, TempoPreparoReceita: "15", ImagemAutor: "bolo.jpg", Categorias: ["Doces"], Porcoes: 1, Ingredientes: "1 ovo;4 colheres de sopa de óleo;7 colheres de sopa de farinha de trigo;3 colheres de sopa de leite;5 colheres de sopa de açúcar;1 colher de sopa de fermento em pó", ModoPreparo: "Em uma tigela coloque todos os ingredientes e misture bem.;Distribua a massa em duas canecas já untadas e leve para a Air Fryer Mondial em 180º por 10 a 15 minutos.;Retire da Air Fryer com cuidado e incremente com a cobertura que você preferir, com doces, pasta de amendoim, geleias, caldas, castanhas e o que mais você desejar."},
-      { id: 3, tituloReceita: "Torta de Frango", imagemReceita: "torta.jpg", dificuldadeReceita: 7, TempoPreparoReceita: "45", ImagemAutor: "bolo.jpg", Categorias: ["Salgados"], Porcoes: 1, Ingredientes: "1 ovo;4 colheres de sopa de óleo;7 colheres de sopa de farinha de trigo;3 colheres de sopa de leite;5 colheres de sopa de açúcar;1 colher de sopa de fermento em pó", ModoPreparo: "Em uma tigela coloque todos os ingredientes e misture bem.;Distribua a massa em duas canecas já untadas e leve para a Air Fryer Mondial em 180º por 10 a 15 minutos.;Retire da Air Fryer com cuidado e incremente com a cobertura que você preferir, com doces, pasta de amendoim, geleias, caldas, castanhas e o que mais você desejar."},
-  ]; // Aqui entra o fetch real depois
+    const retornoBancoReceitas = [];
 
   const Receitas = retornoBancoReceitas.map((item) => ({
       id: item.id, // "ID" Retornado pelo banco

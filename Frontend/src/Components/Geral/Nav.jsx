@@ -52,6 +52,7 @@ export default function Navbar() {
   // Atualiza sugestões conforme digita
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
+      console.log(searchQuery)
       if (searchQuery.trim() !== "") {
         buscaReceitaNome(searchQuery)
           .then((res) => {
@@ -115,7 +116,7 @@ export default function Navbar() {
                     <li key={receita.id}>
                       <button
                         onClick={() => {
-                          navigate(`/receita/${receita.id}`);
+                          navigate(`/ReceitaDesc/${receita.id}`);
                           setSearchQuery("");
                           setShowResultados(false);
                         }}
