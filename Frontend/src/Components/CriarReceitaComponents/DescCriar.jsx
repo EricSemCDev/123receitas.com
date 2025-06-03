@@ -20,6 +20,7 @@ export default function DescCriar() {
     const [ingredientes, setIngredientes] = useState([]);
     const [passos, setPassos] = useState([]);
     const [images, setImages] = useState([]);
+    const navigate = useNavigate();
 
     // Função para salvar e testar os dados
     const handleSalvar = async () => {
@@ -40,7 +41,7 @@ export default function DescCriar() {
         try {
             const receita = await criarReceita(dadosReceita)
             console.log("Dados completos da receita:", dadosReceita);
-            useNavigate("/Conta")
+            navigate("/Conta")
         } catch (erro) {
             console.log("Erro ao criar Receita:" + erro.message)
         }

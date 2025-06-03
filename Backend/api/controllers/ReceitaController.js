@@ -4,7 +4,7 @@ module.exports = {
     // Criar uma nova receita
     create: async function (req, res) {
       try {
-        // Criar a receita no banco
+        // --- CRIAR A RECEITA ---
         const novaReceita = await Receita.create({
           titulo: req.body.titulo,
           descricao: req.body.descricao,
@@ -15,55 +15,58 @@ module.exports = {
           criador: req.body.criador,
           ingredientes: req.body.ingredientes
         }).fetch();
-    
-        // --- TRATAMENTO DAS FOTOS (arquivos reais) ---
+
+        // --- UPLOAD DE FOTOS ---
         const arquivos = req.file('fotos');
         if (arquivos && arquivos._files.length > 0) {
           await new Promise((resolve, reject) => {
             arquivos.upload({
-              maxBytes: 5 * 1024 * 1024, // 5MB máx por imagem
+              maxBytes: 5 * 1024 * 1024, // 5MB por imagem
               dirname: require('path').resolve(sails.config.appPath, 'assets/uploads/receitas')
             }, async function (err, uploadedFiles) {
               if (err) return reject(err);
-    
-              // Limitar a 4 fotos no máximo
+
               const fotosParaSalvar = uploadedFiles.slice(0, 4).map(file => ({
                 receita: novaReceita.id,
                 receita_foto: require('fs').readFileSync(file.fd)
               }));
-    
+
               await ReceitaFoto.createEach(fotosParaSalvar);
               resolve();
             });
           });
         }
-    
-        // --- CATEGORIAS ASSOCIADAS ---
-        if (req.body.categorias) {
-          let categorias = req.body.categorias
 
-          if (typeof categorias === 'string') {
-            try {
-              categorias = JSON.parse(categorias)
-            } catch (e) {
-              console.warn('Categorias veio como string mal formatada: ', req.body.categorias)
-              categorias = []
-            }
+        // --- ASSOCIAÇÃO DE CATEGORIAS ---
+        let categorias = req.body.categorias;
+
+        if (categorias) {
+          // Se não for array, transforma
+          if (!Array.isArray(categorias)) {
+            categorias = [categorias];
           }
-          
-          if (Array.isArray(categorias)) {
+
+          // Converter para números válidos
+          categorias = categorias
+            .map(c => parseInt(c))
+            .filter(c => !isNaN(c));
+
+          if (categorias.length > 0) {
             const categoriasAssociadas = categorias.map(categoriaId => ({
               receita: novaReceita.id,
-              categoria: parseInt(categoriaId)
+              categoria: categoriaId
             }));
+
             await ReceitaCategorias.createEach(categoriasAssociadas);
-          } else {  
-            console.warn('Nenhuma categoria associada ou o formato está incorreto');
+          } else {
+            console.warn('Nenhuma categoria válida foi fornecida.');
           }
+        } else {
+          console.warn('Nenhuma categoria foi enviada.');
         }
-        
+
         return res.status(201).json(novaReceita);
-    
+
       } catch (error) {
         console.error('Erro ao criar receita:', error);
         return res.status(500).json({ erro: 'Erro ao criar receita', detalhes: error.message });
@@ -225,6 +228,37 @@ module.exports = {
       } catch (error) {
         return res.status(500).json({ erro: 'Erro ao remover receita', detalhes: error.message });
       }
+    },
+    filtro: async function (req, res) {
+      try {
+        const dificuldadeMax = parseFloat(req.query.dificuldadeMax);
+        const tempoMax = parseFloat(req.query.tempoMax);
+        const categoria = req.query.categoria;
+        const ordem = req.query.ordem; // asc ou desc
+
+        let where = {};
+
+        if (!isNaN(dificuldadeMax)) {
+          where.dificuldade = { '<=': dificuldadeMax };
+        }
+
+        if (!isNaN(tempoMax)) {
+          where.tempo_preparo = { '<=': tempoMax };
+        }
+
+        if (categoria) {
+          where.categorias = { contains: categoria }; // Se estiver como array JSON ou string
+        }
+
+        const receitas = await Receita.find({
+          where,
+          sort: ordem === 'asc' ? 'tempo_preparo ASC' : ordem === 'desc' ? 'tempo_preparo DESC' : undefined,
+        });
+
+        return res.json(receitas);
+      } catch (error) {
+        console.error('Erro ao buscar receitas:', error);
+        return res.status(500).json({ erro: 'Erro na busca', detalhes: error.message });
+      }
     }
   };
-  

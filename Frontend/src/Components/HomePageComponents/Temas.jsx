@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Temas = forwardRef((props, ref) => {
     /* Variaveis da pagina */
-    const Tema1 = "Mais Vistos";
+    const Tema1 = "Todas as Receitas";
     const Tema2 = "Tá Fácil Demais";
     const Tema3 = "Vapt Vupt";
     const RotaPesquisa = "/BuscaReceita";

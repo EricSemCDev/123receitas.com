@@ -29,7 +29,7 @@ export default function Cadastro2({ voltarEtapa, dadosAdicionais, setDadosAdicio
             console.log("Erro no Cadastro:" + erro.message)
         }
 
-        //navigate("/");
+        navigate("/");
       };
 
     const handleImagemChange = (e) => {

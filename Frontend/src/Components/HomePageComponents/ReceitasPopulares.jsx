@@ -43,7 +43,7 @@ export default function ReceitasPopulares() {
 
           <div className="flex flex-col items-center justify-center mx-4 md:mx-8 lg:mx-16 xl:mx-32">
             {/* Titulo */}
-              <p className="font-bold text-3xl bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent">Veja nossas receitas populares:</p>
+              <p className="font-bold text-3xl bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent">Sugestões do dia:</p>
               <div className="flex items-center justify-between space-x-20 pt-12">
                 {/* Card de receita (3 mais populares) */}
                 {receitas.map((receita) =>(
