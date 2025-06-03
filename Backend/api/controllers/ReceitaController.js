@@ -260,5 +260,28 @@ module.exports = {
         console.error('Erro ao buscar receitas:', error);
         return res.status(500).json({ erro: 'Erro na busca', detalhes: error.message });
       }
+    },
+    buscar: async function(req, res) {
+      try {
+        const { query } = req.query;
+
+        if (!query) {
+          return res.status(400).json({ erro: 'Parâmetro "query" é obrigatório.' });
+        }
+
+        const resultado = await Receita.getDatastore().sendNativeQuery(
+          `
+            SELECT * FROM receitas
+            WHERE titulo ILIKE $1
+          `,
+          [`%${query}%`]
+        );
+
+        return res.json(resultado.rows);
+
+      } catch (erro) {
+        console.error('Erro na busca:', erro);
+        return res.status(500).json({ erro: 'Erro interno no servidor.' });
+      }
     }
   };

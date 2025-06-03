@@ -223,7 +223,7 @@ export async function filtrarReceita(filtros) {
 }
 export async function buscaReceitaNome(nomeReceita) {
   try {
-    const response = await fetch(`${API_BASE_URL}/receitas/busca?nome=${encodeURIComponent(nomeReceita)}`);
+    const response = await fetch(`${API_BASE_URL}/receitas/busca/${encodeURIComponent(nomeReceita)}`);
 
     const resultado = await response.json();
 
@@ -233,6 +233,7 @@ export async function buscaReceitaNome(nomeReceita) {
 
     return resultado;
   } catch (error) {
+    console.error("Erro na busca de receitas:", error);
     throw error;
   }
 }
