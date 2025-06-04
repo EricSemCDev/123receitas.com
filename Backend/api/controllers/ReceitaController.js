@@ -125,7 +125,7 @@ module.exports = {
               dificuldade: r.dificuldade,
               tempo_preparo: r.tempo_preparo,
               user_foto: userFotoUrl, //falta esse
-              imagemReceita: imagens[0],
+              imagemReceita: imagens,
               categorias: nomesCategorias,
               porcoes: r.porcoes,
               ingredientes: r.ingredientes,
@@ -344,53 +344,58 @@ module.exports = {
         return res.status(500).json({ erro: 'Erro ao remover receita', detalhes: error.message });
       }
     },
-    filtro: async function (req, res) {
+    buscar: async function (req, res) {
       try {
-        const dificuldadeMax = parseFloat(req.query.dificuldadeMax);
-        const tempoMax = parseFloat(req.query.tempoMax);
-        const categoria = req.query.categoria;
-        const ordem = req.query.ordem; // asc ou desc
+        const { tempo, dificuldade, categoria } = req.query;
 
-        let where = {};
-
-        if (!isNaN(dificuldadeMax)) {
-          where.dificuldade = { '<=': dificuldadeMax };
+        // 🔐 Validações básicas
+        if (tempo && isNaN(tempo)) {
+          return res.status(400).json({ erro: 'Tempo deve ser um número' });
         }
 
-        if (!isNaN(tempoMax)) {
-          where.tempo_preparo = { '<=': tempoMax };
+        if (dificuldade && isNaN(dificuldade)) {
+          return res.status(400).json({ erro: 'Dificuldade deve ser um número' });
         }
 
+        if (categoria && isNaN(categoria)) {
+          return res.status(400).json({ erro: 'Categoria deve ser um número' });
+        }
+
+        const whereClauses = [];
+        const params = [];
+        let joinCategoria = '';
+
+        // 🔍 Filtro por tempo
+        if (tempo) {
+          params.push(parseInt(tempo));
+          whereClauses.push(`r.tempo_preparo <= $${params.length}`);
+        }
+
+        // 🔍 Filtro por dificuldade
+        if (dificuldade) {
+          params.push(parseInt(dificuldade));
+          whereClauses.push(`r.dificuldade = $${params.length}`);
+        }
+
+        // 🔍 Filtro por categoria via tabela intermediária
         if (categoria) {
-          where.categorias = { contains: categoria }; // Se estiver como array JSON ou string
+          joinCategoria = `
+            INNER JOIN "Receita_Categorias" rc ON rc.receita_id = r.id
+          `;
+          params.push(parseInt(categoria));
+          whereClauses.push(`rc.categoria_id = $${params.length}`);
         }
 
-        const receitas = await Receita.find({
-          where,
-          sort: ordem === 'asc' ? 'tempo_preparo ASC' : ordem === 'desc' ? 'tempo_preparo DESC' : undefined,
-        });
+        const whereSQL = whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : '';
 
-        return res.json(receitas);
-      } catch (error) {
-        console.error('Erro ao buscar receitas:', error);
-        return res.status(500).json({ erro: 'Erro na busca', detalhes: error.message });
-      }
-    },
-    buscar: async function(req, res) {
-      try {
-        const { query } = req.query;
+        const sql = `
+          SELECT DISTINCT r.* 
+          FROM "Receita" r
+          ${joinCategoria}
+          ${whereSQL}
+        `;
 
-        if (!query) {
-          return res.status(400).json({ erro: 'Parâmetro "query" é obrigatório.' });
-        }
-
-        const resultado = await Receita.getDatastore().sendNativeQuery(
-          `
-            SELECT * FROM "Receita"
-            WHERE titulo ILIKE $1
-          `,
-          [`%${query}%`]
-        );
+        const resultado = await Receita.getDatastore().sendNativeQuery(sql, params);
 
         return res.json(resultado.rows);
 
@@ -399,4 +404,4 @@ module.exports = {
         return res.status(500).json({ erro: 'Erro interno no servidor.' });
       }
     }
-  };
+  }

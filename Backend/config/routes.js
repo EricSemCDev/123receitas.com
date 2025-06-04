@@ -21,7 +21,6 @@ module.exports.routes = {
   'GET /receita/detalhes/:id': 'ReceitaController.getById',
   'PUT /receita/:id': 'ReceitaController.update',
   'DELETE /receita/:id': 'ReceitaController.delete',
-  'GET /receita/filtro': 'ReceitaController.filtro',
   'GET /receitas/buscar': 'ReceitaController.buscar',
 
   //Rotas Tabela ReceitaFoto

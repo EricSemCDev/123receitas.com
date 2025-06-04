@@ -8,22 +8,22 @@ export default function ReceitasPopulares() {
   useEffect(() => {
     async function buscarReceitasPopulares() {
       try {
-        const dados = await buscaTodasReceitas(); // espera a resposta da API
+        const dados = await buscaTodasReceitas();
 
         const receitasFormatadas = (dados || []).map((item) => ({
           id: item.id,
           titulo: item.titulo,
-          imagemR: item.imagemReceita,
+          imagens: item.imagemReceita,
           dificuldade: item.dificuldade,
-          TempoPreparo: parseInt(item.tempo_preparo),
-          ImagemA: item.user_foto,
+          tempo_preparo: parseInt(item.tempo_preparo),
+          user_foto: item.user_foto,
           categorias: item.categorias,
           porcao: item.porcoes,
           ingredientes: item.ingredientes,
-          modoPreparo: item.modo_preparo,
+          modo_preparo: item.modo_preparo,
         }));
 
-        setReceitas(receitasFormatadas.slice(0, 3)); // pega só 3
+        setReceitas(receitasFormatadas.slice(0, 3));
       } catch (err) {
         console.error("Erro ao buscar receitas:", err);
       }

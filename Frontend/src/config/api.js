@@ -237,20 +237,21 @@ export async function buscaReceitaPorIdReceita(id) {
 }
 
 //Separar filtro a filtro ou função global e identar strings?
-export async function filtrarReceita(filtros) {
+export async function buscarReceitasPorFiltro({ tempo, dificuldade, categoria }) {
   try {
-    const query = new URLSearchParams(filtros).toString();
-
-    const response = await fetch(`${API_BASE_URL}/receitas?${query}`);
+    const response = await fetch(
+      `${API_BASE_URL}/receitas/buscar-filtro?tema=${encodeURIComponent(tema)}`
+    );
 
     const resultado = await response.json();
 
     if (!response.ok) {
-      throw new Error(resultado.erro || 'Erro ao filtrar receitas');
+      throw new Error(resultado.erro || "Erro na busca por tema");
     }
 
     return resultado;
   } catch (error) {
+    console.error("Erro na busca por tema:", error);
     throw error;
   }
 }
