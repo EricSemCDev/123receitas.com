@@ -1,53 +1,50 @@
-/* Dependencias */
 import { useState, useEffect } from "react";
-
-/* Componentes */
+import { buscaTodasReceitas } from "../../config/api";
 import ReceitaCard from "../Geral/receitaCard";
 
 export default function ReceitasPopulares() {
-    /* Variaveis da pagina */
-    const retornoBancoReceitas = [];
+  const [receitas, setReceitas] = useState([]);
 
-  const Receitas = retornoBancoReceitas.map((item) => ({
-      id: item.id, // "ID" Retornado pelo banco
-      titulo: item.tituloReceita, // "Nome Da Receita" Retornado pelo banco
-      imagemR: item.imagemReceita, // "Imagem da Receita" Retornado pelo banco
-      dificuldade: item.dificuldadeReceita, // "Dificuldade" Retornada pelo banco
-      TempoPreparo: parseInt(item.TempoPreparoReceita), // "Tempo De Preparo" Retornado pelo banco
-      ImagemA: item.ImagemAutor, // "Imagem do Autor" Retornado pelo banco
-      categorias: item.Categorias, // "Categorias" Retornadas pelo banco
-      porcao: item.Porcoes, // "Porçoes" Retornadas pelo banco
-      ingredientes: item.Ingredientes, // "ingredientes" Retornados pelo banco
-      modoPreparo: item.ModoPreparo, // "Modo de Preparo" Retornado pelo banco
-  }));
+  useEffect(() => {
+    async function buscarReceitasPopulares() {
+      try {
+        const dados = await buscaTodasReceitas(); // espera a resposta da API
 
-    /* Logica de repetição para validar o card */
-    const [receitas, setReceitas] = useState([]);
-    useEffect(() => {
-        async function buscarReceitasPopulares() {
-            // Exemplo com limite de 3
-            setReceitas(Receitas.slice(0, 3));
-        }
+        const receitasFormatadas = (dados || []).map((item) => ({
+          id: item.id,
+          titulo: item.titulo,
+          imagemR: item.imagemReceita,
+          dificuldade: item.dificuldade,
+          TempoPreparo: parseInt(item.tempo_preparo),
+          ImagemA: item.user_foto,
+          categorias: item.categorias,
+          porcao: item.porcoes,
+          ingredientes: item.ingredientes,
+          modoPreparo: item.modo_preparo,
+        }));
 
-        buscarReceitasPopulares();
-    }, []);
+        setReceitas(receitasFormatadas.slice(0, 3)); // pega só 3
+      } catch (err) {
+        console.error("Erro ao buscar receitas:", err);
+      }
+    }
 
+    buscarReceitasPopulares();
+  }, []);
 
-    return (
-      <section className="py-16 px-8">
+  return (
+    <section className="py-16 px-8">
+      <div className="flex flex-col items-center justify-center mx-4 md:mx-8 lg:mx-16 xl:mx-32">
+        <p className="font-bold text-3xl bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent">
+          Sugestões do dia:
+        </p>
 
-          <div className="flex flex-col items-center justify-center mx-4 md:mx-8 lg:mx-16 xl:mx-32">
-            {/* Titulo */}
-              <p className="font-bold text-3xl bg-gradient-to-r from-[#FF7B00] to-[#FF3700] bg-clip-text text-transparent">Sugestões do dia:</p>
-              <div className="flex items-center justify-between space-x-20 pt-12">
-                {/* Card de receita (3 mais populares) */}
-                {receitas.map((receita) =>(
-                    <ReceitaCard key={receita.id} receita={receita} />
-                ))}
-                
-              </div>
-          </div>
-
-      </section>
-    );
-  }
+        <div className="flex items-center justify-between space-x-20 pt-12">
+          {receitas.map((receita) => (
+            <ReceitaCard key={receita.id} receita={receita} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

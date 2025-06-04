@@ -94,41 +94,44 @@ module.exports = {
           categoriasPorId[c.id] = c.nome_categoria;
         });
 
-        const userFoto = await User_Foto.findOne({ usuario: userId });
-        const userFotoUrl = userFoto ? `http://localhost:1337/usuario/${r.criador}/foto` : null;
 
-        const receitasCompletas = receitas.map((r) => {
-          // Validação e debug das categorias
-          const nomesCategorias = (r.categorias || [])
-            .map((c) => {
-              if (!c.categoria) {
-                console.warn(`Categoria vazia para receita ${r.id}`, c);
-                return null;
-              }
-              const nome = categoriasPorId[c.categoria];
-              if (!nome) {
-                console.warn(`Categoria ${c.categoria} não encontrada no dicionário`);
-              }
-              return nome;
-            })
-            .filter(Boolean);
+        const receitasCompletas = await Promise.all( 
+          receitas.map(async(r) => {
 
-          // Validação e debug das fotos
-          const imagens = (r.fotos || []).map((f) => `http://localhost:1337/receita/foto/${f.id}`);
+            const userFoto = await User_Foto.findOne({ usuario: r.criador?.id });
+            const userFotoUrl = userFoto ? `http://localhost:1337/usuario/${r.criador?.id}/foto` : null;
 
-          return {
-            id: r.id,
-            titulo: r.titulo,
-            dificuldade: r.dificuldade,
-            tempo_preparo: r.tempo_preparo,
-            user_foto: userFotoUrl || "Nada", //falta esse
-            imagemReceita: imagens[0],
-            categorias: nomesCategorias,
-            porcoes: r.porcoes,
-            ingredientes: r.ingredientes,
-            modo_preparo: r.modo_preparo,
-          };
-        });
+            // Validação e debug das categorias
+            const nomesCategorias = (r.categorias || [])
+              .map((c) => {
+                if (!c.categoria) {
+                  console.warn(`Categoria vazia para receita ${r.id}`, c);
+                  return null;
+                }
+                const nome = categoriasPorId[c.categoria];
+                if (!nome) {
+                  console.warn(`Categoria ${c.categoria} não encontrada no dicionário`);
+                }
+                return nome;
+              })
+              .filter(Boolean);
+
+            // Validação e debug das fotos
+            const imagens = (r.fotos || []).map((f) => `http://localhost:1337/receita/foto/${f.id}`);
+
+            return {
+              id: r.id,
+              titulo: r.titulo,
+              dificuldade: r.dificuldade,
+              tempo_preparo: r.tempo_preparo,
+              user_foto: userFotoUrl, //falta esse
+              imagemReceita: imagens[0],
+              categorias: nomesCategorias,
+              porcoes: r.porcoes,
+              ingredientes: r.ingredientes,
+              modo_preparo: r.modo_preparo,
+            };
+        }));
 
         return res.json(receitasCompletas);
       } catch (error) {
