@@ -346,14 +346,14 @@ module.exports = {
     },
     buscar: async function (req, res) {
       try {
-        const { tempo, dificuldade, categoria } = req.query;
+        const { tempoMax, dificuldadeMax, categoria } = req.query;
 
-        // 🔐 Validações básicas
-        if (tempo && isNaN(tempo)) {
+        // Validações
+        if (tempoMax && isNaN(tempoMax)) {
           return res.status(400).json({ erro: 'Tempo deve ser um número' });
         }
 
-        if (dificuldade && isNaN(dificuldade)) {
+        if (dificuldadeMax && isNaN(dificuldadeMax)) {
           return res.status(400).json({ erro: 'Dificuldade deve ser um número' });
         }
 
@@ -361,47 +361,79 @@ module.exports = {
           return res.status(400).json({ erro: 'Categoria deve ser um número' });
         }
 
+        // Montagem dinâmica da query
         const whereClauses = [];
         const params = [];
-        let joinCategoria = '';
+        const joinCategoria = categoria
+          ? `INNER JOIN "Receitas_Categorias" rc ON rc.receita = r.id`
+          : '';
 
-        // 🔍 Filtro por tempo
-        if (tempo) {
-          params.push(parseInt(tempo));
+        if (tempoMax) {
+          params.push(parseInt(tempoMax));
           whereClauses.push(`r.tempo_preparo <= $${params.length}`);
         }
 
-        // 🔍 Filtro por dificuldade
-        if (dificuldade) {
-          params.push(parseInt(dificuldade));
-          whereClauses.push(`r.dificuldade = $${params.length}`);
+        if (dificuldadeMax) {
+          params.push(parseInt(dificuldadeMax));
+          whereClauses.push(`r.dificuldade <= $${params.length}`);
         }
 
-        // 🔍 Filtro por categoria via tabela intermediária
         if (categoria) {
-          joinCategoria = `
-            INNER JOIN "Receita_Categorias" rc ON rc.receita_id = r.id
-          `;
           params.push(parseInt(categoria));
           whereClauses.push(`rc.categoria_id = $${params.length}`);
         }
 
-        const whereSQL = whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : '';
+        const whereSQL = whereClauses.length > 0
+          ? `WHERE ${whereClauses.join(' AND ')}`
+          : '';
 
         const sql = `
-          SELECT DISTINCT r.* 
+          SELECT DISTINCT r.*
           FROM "Receita" r
           ${joinCategoria}
           ${whereSQL}
         `;
 
         const resultado = await Receita.getDatastore().sendNativeQuery(sql, params);
+        const receitasFiltradas = resultado.rows;
 
-        return res.json(resultado.rows);
+        // Processamento completo das receitas
+        const receitasCompletas = await Promise.all(
+          receitasFiltradas.map(async (r) => {
+            const [criador, fotos, categorias] = await Promise.all([
+              Usuario.findOne({ id: r.criador }),
+              ReceitaFoto.find({ receita: r.id }),
+              ReceitaCategorias.find({ receita: r.id }),
+            ]);
+
+            const userFoto = await User_Foto.findOne({ usuario: criador?.id });
+            const userFotoUrl = userFoto ? `http://localhost:1337/usuario/${criador.id}/foto` : null;
+            const imagens = fotos.map((f) => `http://localhost:1337/receita/foto/${f.id}`);
+
+            const categoriaIds = categorias.map((c) => c.categoria_id);
+            const categoriasCompletas = await Categoria.find({ id: categoriaIds });
+            const nomesCategorias = categoriasCompletas.map((c) => c.nome_categoria);
+
+            return {
+              id: r.id,
+              titulo: r.titulo,
+              dificuldade: r.dificuldade,
+              tempo_preparo: r.tempo_preparo,
+              user_foto: userFotoUrl,
+              imagemReceita: imagens,
+              categorias: nomesCategorias,
+              porcoes: r.porcoes,
+              ingredientes: r.ingredientes,
+              modo_preparo: r.modo_preparo,
+            };
+          })
+        );
+
+        return res.json(receitasCompletas);
 
       } catch (erro) {
-        console.error('Erro na busca:', erro);
-        return res.status(500).json({ erro: 'Erro interno no servidor.' });
+        console.error('Erro na busca com filtros:', erro);
+        return res.status(500).json({ erro: 'Erro interno no servidor.', detalhes: erro.message });
       }
     }
   }

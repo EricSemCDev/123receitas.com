@@ -149,7 +149,6 @@ export async function criarReceita(dados) {
     throw error;
   }
 }
-
 export async function editarReceita(dados) {
   try {
     const token = localStorage.getItem('token');
@@ -216,7 +215,6 @@ export async function buscaReceitaID() {
     console.error(e)
   }
 }
-
 export async function buscaReceitaPorIdReceita(id) {
   try {
     const response = await fetch(`${API_BASE_URL}/receita/${id}`, {
@@ -235,23 +233,32 @@ export async function buscaReceitaPorIdReceita(id) {
     throw e;
   }
 }
-
-//Separar filtro a filtro ou função global e identar strings?
 export async function buscarReceitasPorFiltro({ tempo, dificuldade, categoria }) {
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/receitas/buscar-filtro?tema=${encodeURIComponent(tema)}`
-    );
+  const params = [];
 
+  if (tempo) {
+    params.push(`tempoMax=${encodeURIComponent(tempo)}`);
+  }
+  if (dificuldade) {
+    params.push(`dificuldadeMax=${encodeURIComponent(dificuldade)}`);
+  }
+  if (categoria) {
+    params.push(`categoria=${encodeURIComponent(categoria)}`);
+  }
+
+  const queryString = params.join("&");
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/receitas/buscar?${queryString}`);
     const resultado = await response.json();
 
     if (!response.ok) {
-      throw new Error(resultado.erro || "Erro na busca por tema");
+      throw new Error(resultado.erro || "Erro na busca");
     }
 
     return resultado;
   } catch (error) {
-    console.error("Erro na busca por tema:", error);
+    console.error("Erro na busca por filtro:", error);
     throw error;
   }
 }
