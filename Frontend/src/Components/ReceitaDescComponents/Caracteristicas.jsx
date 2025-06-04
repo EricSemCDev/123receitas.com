@@ -4,10 +4,10 @@ import { useLocation } from "react-router-dom";
 /* Componentes */
 import EstrelasDificuldade from "../Geral/EstrelasDificuldade";
 
-export default function Características() {
+export default function Características({receita}) {
     /* Variaveis da Pagina */
     const location = useLocation();
-    const receita = location.state?.receita;
+    //const receita = location.state?.receita;
 
     return (
      <section>

@@ -16,7 +16,7 @@ export default function App() {
         <Route path="/Cadastro" element={<CadastroPage />}/>
         <Route path="/Login" element={<LoginPage/>}/>
         <Route path="/BuscaReceita" element={<BuscaReceita/>}/>
-        <Route path="/ReceitaDesc" element={<ReceitaDesc/>}/>
+        <Route path="/ReceitaDesc/:id" element={<ReceitaDesc/>}/>
         <Route path="/Conta" element={<Conta/>}/>
         <Route path="/CriarReceita" element={<CriarReceita/>}/>
       </Routes>

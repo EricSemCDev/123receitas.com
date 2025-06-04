@@ -2,11 +2,11 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
-export default function ImageCarousel() {
+export default function ImageCarousel({receita}) {
   /* Variaveis da Pagina */
   const location = useLocation();
-  const receita = location.state?.receita;
-  const images = receita.imagens
+  //const receita = location.state?.receita;
+  const images = receita?.imagens || ["Nada", "Nada", "Nada", "Nada"]
   
   const [selectedImage, setSelectedImage] = useState(images[0]);
 

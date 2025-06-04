@@ -2,9 +2,9 @@ import { FaCircle } from "react-icons/fa";
 
 import { useLocation } from "react-router-dom";
 
-export default function Ingredientes() {
+export default function Ingredientes({receita}) {
     const location = useLocation();
-    const receita = location.state?.receita;
+    //const receita = location.state?.receita;
     const ingredientes = receita?.ingredientes?.split(";").map((item) => item.trim()).filter((item) => item.length > 0);
 
     return (

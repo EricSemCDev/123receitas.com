@@ -1,8 +1,8 @@
 import { useLocation } from "react-router-dom";
 
-export default function ModoPreparo() {
+export default function ModoPreparo({receita}) {
     const location = useLocation();
-    const receita = location.state?.receita;
+    //const receita = location.state?.receita;
     const modoPreparo = receita?.modo_preparo?.split(";").map((item) => item.trim()).filter((item) => item.length > 0);
 
     return (

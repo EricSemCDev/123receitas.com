@@ -7,7 +7,7 @@ import { BsAlarmFill } from "react-icons/bs";
 
 export default function receitaCard({ receita }) {
     /* Variaveis da pagina */
-    const RotaReceitaDesc = "/ReceitaDesc"
+    const RotaReceitaDesc = `/ReceitaDesc/${receita?.id}`;
 
   return (
     <Link to={RotaReceitaDesc} state={{ receita: receita || "0" }} className="w-60 h-60 bg-gray-200 flex flex-col rounded-xl shadow-[0px_2px_5px_rgba(0,0,0,0.5)] transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-[0px_5px_10px_rgba(0,0,0,0.5)]">

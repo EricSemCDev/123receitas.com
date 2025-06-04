@@ -216,6 +216,26 @@ export async function buscaReceitaID() {
     console.error(e)
   }
 }
+
+export async function buscaReceitaPorIdReceita(id) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/receita/${id}`, {
+      method: 'GET',
+    });
+
+    if (!response.ok) {
+      const erro = await response.json();
+      throw new Error(erro.erro || `Erro ao buscar receita: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (e) {
+    console.error("Erro ao buscar receita por ID:", e);
+    throw e;
+  }
+}
+
 //Separar filtro a filtro ou função global e identar strings?
 export async function filtrarReceita(filtros) {
   try {

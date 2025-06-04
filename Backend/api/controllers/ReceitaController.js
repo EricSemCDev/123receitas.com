@@ -224,15 +224,72 @@ module.exports = {
     // Buscar uma receita específica pelo ID
     findOne: async function (req, res) {
       try {
-        const receita = await Receita.findOne({ id: req.params.id }).populate('criador');
+        const id = req.params.id;
+
+        const receita = await Receita.findOne({ id })
+          .populate('criador')
+          .populate('fotos')
+          .populate('categorias');
+
         if (!receita) {
           return res.status(404).json({ erro: 'Receita não encontrada' });
         }
-        return res.json(receita);
+
+        // Buscar nome das categorias
+        const categoriaIds = receita.categorias.map(c => c.categoria);
+        const categoriasCompletas = await Categoria.find({ id: categoriaIds });
+
+        const categoriasPorId = {};
+        categoriasCompletas.forEach(c => {
+          categoriasPorId[c.id] = c.nome_categoria;
+        });
+
+        const nomesCategorias = (receita.categorias || [])
+          .map((c) => {
+            if (!c.categoria) return null;
+            return categoriasPorId[c.categoria];
+          })
+          .filter(Boolean);
+
+        // Buscar foto do criador
+        const userFoto = await User_Foto.findOne({ usuario: receita.criador?.id });
+        const userFotoUrl = userFoto ? `http://localhost:1337/usuario/${receita.criador?.id}/foto` : null;
+
+        // Montar imagens da receita
+        const imagens = (receita.fotos || []).map((f) => `http://localhost:1337/receita/foto/${f.id}`);
+
+        // Retorno final
+        const receitaFormatada = {
+          id: receita.id,
+          titulo: receita.titulo,
+          descricao: receita.descricao,
+          modo_preparo: receita.modo_preparo,
+          tempo_preparo: receita.tempo_preparo,
+          porcoes: receita.porcoes,
+          dificuldade: receita.dificuldade,
+          ingredientes: receita.ingredientes,
+          acessos: receita.acessos,
+          createdAt: receita.createdAt,
+          updatedAt: receita.updatedAt,
+
+          criador: {
+            id: receita.criador?.id,
+            nome: receita.criador?.nome,
+            usuario: receita.criador?.usuario,
+          },
+
+          categorias: nomesCategorias,
+          imagens: imagens,
+          user_foto: userFotoUrl,
+        };
+
+        return res.json(receitaFormatada);
       } catch (error) {
+        console.error('Erro ao buscar receita:', error);
         return res.status(500).json({ erro: 'Erro ao buscar receita', detalhes: error.message });
       }
     },
+
     //Busca das fotos pelo ID de uma receita
     getById: async function (req, res) {
       try {
