@@ -74,7 +74,7 @@ export default function Navbar() {
 
   const buscar = () => {
     if (searchQuery.trim() !== "") {
-      navigate(`/buscar?query=${searchQuery}`);
+      navigate(`/BuscaReceita?query=${searchQuery}`);
       setShowResultados(false);
     }
   };

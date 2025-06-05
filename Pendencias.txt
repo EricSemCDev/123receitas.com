@@ -1,0 +1,7 @@
+Passar receitas para a página BuscaReceita (Puxar do banco)
+
+Implementar a busca por Nome de forma efetiva (Passando para a página no caso)
+
+Revisão de bugs
+
+Entrega Final

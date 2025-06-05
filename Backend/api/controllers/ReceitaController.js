@@ -352,16 +352,14 @@ module.exports = {
         if (tempoMax && isNaN(tempoMax)) {
           return res.status(400).json({ erro: 'Tempo deve ser um número' });
         }
-
         if (dificuldadeMax && isNaN(dificuldadeMax)) {
           return res.status(400).json({ erro: 'Dificuldade deve ser um número' });
         }
-
         if (categoria && isNaN(categoria)) {
           return res.status(400).json({ erro: 'Categoria deve ser um número' });
         }
 
-        // Montagem dinâmica da query
+        // Query dinâmica SQL
         const whereClauses = [];
         const params = [];
         const joinCategoria = categoria
@@ -372,15 +370,13 @@ module.exports = {
           params.push(parseInt(tempoMax));
           whereClauses.push(`r.tempo_preparo <= $${params.length}`);
         }
-
         if (dificuldadeMax) {
           params.push(parseInt(dificuldadeMax));
           whereClauses.push(`r.dificuldade <= $${params.length}`);
         }
-
         if (categoria) {
           params.push(parseInt(categoria));
-          whereClauses.push(`rc.categoria_id = $${params.length}`);
+          whereClauses.push(`rc.categoria = $${params.length}`);
         }
 
         const whereSQL = whereClauses.length > 0
@@ -397,37 +393,63 @@ module.exports = {
         const resultado = await Receita.getDatastore().sendNativeQuery(sql, params);
         const receitasFiltradas = resultado.rows;
 
-        // Processamento completo das receitas
-        const receitasCompletas = await Promise.all(
-          receitasFiltradas.map(async (r) => {
-            const [criador, fotos, categorias] = await Promise.all([
-              Usuario.findOne({ id: r.criador }),
-              ReceitaFoto.find({ receita: r.id }),
-              ReceitaCategorias.find({ receita: r.id }),
-            ]);
+        if (receitasFiltradas.length === 0) {
+          return res.json([]);
+        }
 
-            const userFoto = await User_Foto.findOne({ usuario: criador?.id });
-            const userFotoUrl = userFoto ? `http://localhost:1337/usuario/${criador.id}/foto` : null;
-            const imagens = fotos.map((f) => `http://localhost:1337/receita/foto/${f.id}`);
+        // IDs das receitas filtradas
+        const receitaIds = receitasFiltradas.map(r => r.id);
 
-            const categoriaIds = categorias.map((c) => c.categoria_id);
-            const categoriasCompletas = await Categoria.find({ id: categoriaIds });
-            const nomesCategorias = categoriasCompletas.map((c) => c.nome_categoria);
+        // Buscar tudo em lote
+        const [fotosTodas, categoriasTodas, usuarios, usuariosFotos] = await Promise.all([
+          ReceitaFoto.find({ receita: receitaIds }),
+          ReceitaCategorias.find({ receita: receitaIds }),
+          Usuario.find({ id: receitasFiltradas.map(r => r.criador) }),
+          User_Foto.find({ usuario: receitasFiltradas.map(r => r.criador) }),
+        ]);
 
-            return {
-              id: r.id,
-              titulo: r.titulo,
-              dificuldade: r.dificuldade,
-              tempo_preparo: r.tempo_preparo,
-              user_foto: userFotoUrl,
-              imagemReceita: imagens,
-              categorias: nomesCategorias,
-              porcoes: r.porcoes,
-              ingredientes: r.ingredientes,
-              modo_preparo: r.modo_preparo,
-            };
-          })
+        const categoriasIdsUnicos = [...new Set(categoriasTodas.map(c => c.categoria))];
+        const categoriasNomes = await Categoria.find({ id: categoriasIdsUnicos });
+
+        // Mapear dados
+        const mapUsuarios = Object.fromEntries(usuarios.map(u => [u.id, u]));
+        const mapUsuariosFotos = Object.fromEntries(usuariosFotos.map(f => [f.usuario, f]));
+        const mapFotos = fotosTodas.reduce((acc, foto) => {
+          (acc[foto.receita] = acc[foto.receita] || []).push(
+            `http://localhost:1337/receita/foto/${foto.id}`
+          );
+          return acc;
+        }, {});
+        const mapCategorias = categoriasTodas.reduce((acc, cat) => {
+          (acc[cat.receita] = acc[cat.receita] || []).push(cat.categoria);
+          return acc;
+        }, {});
+        const mapCategoriasNomes = Object.fromEntries(
+          categoriasNomes.map(c => [c.id, c.nome_categoria])
         );
+
+        // Montagem final
+        const receitasCompletas = receitasFiltradas.map((r) => {
+          const criador = mapUsuarios[r.criador];
+          const userFoto = mapUsuariosFotos[r.criador];
+          const userFotoUrl = userFoto ? `http://localhost:1337/usuario/${criador.id}/foto` : null;
+          const imagens = mapFotos[r.id] || [];
+          const categoriasIds = mapCategorias[r.id] || [];
+          const nomesCategorias = categoriasIds.map(id => mapCategoriasNomes[id]);
+
+          return {
+            id: r.id,
+            titulo: r.titulo,
+            dificuldade: r.dificuldade,
+            tempo_preparo: r.tempo_preparo,
+            user_foto: userFotoUrl,
+            imagemReceita: imagens,
+            categorias: nomesCategorias,
+            porcoes: r.porcoes,
+            ingredientes: r.ingredientes,
+            modo_preparo: r.modo_preparo,
+          };
+        });
 
         return res.json(receitasCompletas);
 
