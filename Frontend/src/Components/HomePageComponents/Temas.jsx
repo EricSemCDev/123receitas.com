@@ -1,7 +1,7 @@
 /* Dependencias */
 import { forwardRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { buscarReceitasPorFiltro } from "../../config/api";
+import { useNavigate } from "react-router-dom";
+import { buscaTodasReceitas, buscarReceitasPorFiltro } from "../../config/api";
 
 const Temas = forwardRef((props, ref) => {
     const Tema1 = "Todas as Receitas";
@@ -11,11 +11,19 @@ const Temas = forwardRef((props, ref) => {
 
     const navigate = useNavigate();
 
+    const handleBuscaTodasReceitas = async () => {
+        try {
+            const resultado = await buscaTodasReceitas()
+            navigate(RotaPesquisa, {state: {tema: Tema1, resultado: resultado}})
+        } catch (error) {
+            console.error("Erro ao puxar receitas:", error)
+        }
+    }
+
     const handleBuscaPorDificuldade = async () => {
         try {
-            const resultado = await buscarReceitasPorFiltro({ dificuldade: 5});
-            console.log(resultado)
-            navigate(RotaPesquisa, { state: { tema: Tema2, resultado } });
+            const resultado = await buscarReceitasPorFiltro({ dificuldade: 5 });
+            navigate(RotaPesquisa, { state: { tema: Tema2, resultado: resultado } });
         } catch (error) {
             console.error("Erro na busca por dificuldade:", error);
         }
@@ -25,7 +33,7 @@ const Temas = forwardRef((props, ref) => {
         try {
             const resultado = await buscarReceitasPorFiltro({ tempo: 30 });
             console.log(resultado)
-            navigate(RotaPesquisa, { state: { tema: Tema3, resultado } });
+            navigate(RotaPesquisa, { state: { tema: Tema3, resultado: resultado } });
         } catch (error) {
             console.error("Erro na busca por tempo:", error);
         }
@@ -38,13 +46,12 @@ const Temas = forwardRef((props, ref) => {
                     Procure em um dos nossos temas:
                 </p>
                 <div className="flex items-center justify-between space-x-20 pt-12">
-                    <Link
-                        to={RotaPesquisa}
-                        state={{ tema: Tema1 }}
+                    <div
+                        onClick={handleBuscaTodasReceitas}
                         className="cursor-pointer w-64 h-30 bg-gradient-to-r from-[#FF7B00] to-[#FF3700] border border-[#c9c9c9] rounded-xl shadow text-white flex flex-col items-center justify-center transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-[0px_5px_10px_rgba(0,0,0,0.5)]"
                     >
                         <p className="font-bold text-2xl">{Tema1}</p>
-                    </Link>
+                    </div>
                     <div
                         onClick={handleBuscaPorDificuldade}
                         className="cursor-pointer w-64 h-30 bg-gradient-to-r from-[#FF7B00] to-[#FF3700] border border-[#c9c9c9] rounded-xl shadow text-white flex flex-col items-center justify-center transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-[0px_5px_10px_rgba(0,0,0,0.5)]"

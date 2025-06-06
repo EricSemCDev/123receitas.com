@@ -52,9 +52,8 @@ export default function Navbar() {
   // Atualiza sugestões conforme digita
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      console.log(searchQuery)
       if (searchQuery.trim() !== "") {
-        buscaReceitaNome(searchQuery)
+        const resultado = buscaReceitaNome(searchQuery)
           .then((res) => {
             setResultadosBusca(res);
             setShowResultados(true);
@@ -74,7 +73,7 @@ export default function Navbar() {
 
   const buscar = () => {
     if (searchQuery.trim() !== "") {
-      navigate(`/BuscaReceita?query=${searchQuery}`);
+      navigate("/BuscaReceita", {state: {resultado: resultadosBusca}}); //Faltando resolver somente essa parte
       setShowResultados(false);
     }
   };

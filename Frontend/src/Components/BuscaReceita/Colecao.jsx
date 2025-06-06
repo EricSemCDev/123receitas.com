@@ -1,66 +1,64 @@
-/* Dependencias */
+// Dependências
 import { useState, useEffect } from "react";
-import { buscaReceitaID } from "../../config/api";
 
-/* Componentes */
+// Componentes
 import ReceitaCard from "../Geral/receitaCard";
 
-export default function Colecao({dificuldade /*Ex: 2.5*/, categoria /*Ex: Doces*/, ordem /*Ex: Crescente*/, onChangeTotal} /*<-- Variaveis de filtro*/) {
-  /* Variaveis da pagina */
-  const retornoBancoReceitas = [
-      { id: 1, tituloReceita: "Butter Chicken", imagemReceita: "./src/assets/image.png", dificuldadeReceita: 5, TempoPreparoReceita: "10", ImagemAutor: "./src/assets/linda.png", Categorias: ["Salgados", "Bebidas"]},
-      { id: 2, tituloReceita: "Brigadeiro", imagemReceita: "brigadeiro.jpg", dificuldadeReceita: 2, TempoPreparoReceita: "15", ImagemAutor: "bolo.jpg", Categorias: ["Doces"]},
-      { id: 3, tituloReceita: "Torta de Frango", imagemReceita: "torta.jpg", dificuldadeReceita: 7, TempoPreparoReceita: "45", ImagemAutor: "bolo.jpg", Categorias: ["Salgados"]},
-  ]; // Aqui entra o fetch real depois
-
-  const Receitas = retornoBancoReceitas.map((item) => ({
-      id: item.id, // "ID" Retornado pelo banco
-      titulo: item.tituloReceita, // "Nome Da Receita" Retornado pelo banco
-      imagemR: item.imagemReceita, // "Imagem da Receita" Retornado pelo banco
-      dificuldade: item.dificuldadeReceita, // "Dificuldade" Retornada pelo banco
-      TempoPreparo: parseInt(item.TempoPreparoReceita), // "Tempo De Preparo" Retornado pelo banco
-      ImagemA: item.ImagemAutor, // "Imagem do Autor" Retornado pelo banco
-      categorias: item.Categorias // "Categorias" Retornadas pelo banco
-  }));
-
-  /* Logica de repetição para validar o card */
+export default function Colecao({
+  dificuldade,
+  categoria,
+  ordem,
+  onChangeTotal,
+  receitasExternas
+}) {
   const [receitas, setReceitas] = useState([]);
+
   useEffect(() => {
-    let filtradas = [...Receitas];
+    if (!receitasExternas || receitasExternas.length === 0) {
+      setReceitas([]);
+      if (onChangeTotal) onChangeTotal(0);
+      return;
+    }
+
+    // Normaliza os dados recebidos
+    let filtradas = receitasExternas.map(item => ({
+      id: item.id,
+      titulo: item.titulo,
+      imagens: item.imagemReceita ,
+      dificuldade: item.dificuldade,
+      tempo_preparo: item.tempo_preparo,
+      user_foto: item.user_foto,
+      categorias: item.categorias
+    }));
 
     // Filtro por categoria
-    if (categoria) {
+    if (categoria?.nome) {
       filtradas = filtradas.filter((r) => r.categorias.includes(categoria.nome));
     }
 
-    // Filtro por dificuldade (ex: receitas com dificuldade menor ou igual)
+    // Filtro por dificuldade
     if (dificuldade) {
       filtradas = filtradas.filter((r) => r.dificuldade <= dificuldade);
     }
 
     // Ordenação
     if (ordem?.nome === "Crescente") {
-      filtradas.sort((a, b) => a.TempoPreparo - b.TempoPreparo);
+      filtradas.sort((a, b) => a.tempo_preparo - b.tempo_preparo);
     } else if (ordem?.nome === "Decrescente") {
-      filtradas.sort((a, b) => b.TempoPreparo - a.TempoPreparo);
+      filtradas.sort((a, b) => b.tempo_preparo - a.tempo_preparo);
     }
 
     setReceitas(filtradas);
-
     if (onChangeTotal) onChangeTotal(filtradas.length);
-  }, [dificuldade, categoria, ordem]);
+  }, [dificuldade, categoria, ordem, receitasExternas]);
 
-    return (
-     <section className="relative mt-7 mx-4 md:mx-8 lg:mx-16 xl:mx-36">
-
+  return (
+    <section className="relative mt-7 mx-4 md:mx-8 lg:mx-16 xl:mx-36">
       <div className="flex flex-wrap space-x-10 space-y-10">
-        {/* Card de receita*/}
-        {receitas.map((receita) =>(
-            <ReceitaCard key={receita.id} receita={receita} />
+        {receitas.map((receita) => (
+          <ReceitaCard key={receita.id} receita={receita} />
         ))}
       </div>
-
-     </section>
-    );
-  }
-  
+    </section>
+  );
+}
