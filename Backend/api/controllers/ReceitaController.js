@@ -346,7 +346,7 @@ module.exports = {
     },
     buscar: async function (req, res) {
       try {
-        const { tempoMax, dificuldadeMax, categoria } = req.query;
+        const { tempoMax, dificuldadeMax, categoria, query } = req.query;
 
         // Validações
         if (tempoMax && isNaN(tempoMax)) {
@@ -377,6 +377,10 @@ module.exports = {
         if (categoria) {
           params.push(parseInt(categoria));
           whereClauses.push(`rc.categoria = $${params.length}`);
+        }
+        if (query) {
+          params.push(`%${query.toLowerCase()}%`);
+          whereClauses.push(`LOWER(r.titulo) LIKE $${params.length}`);
         }
 
         const whereSQL = whereClauses.length > 0

@@ -53,7 +53,7 @@ export default function Navbar() {
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       if (searchQuery.trim() !== "") {
-        const resultado = buscaReceitaNome(searchQuery)
+        buscaReceitaNome(searchQuery)
           .then((res) => {
             setResultadosBusca(res);
             setShowResultados(true);
