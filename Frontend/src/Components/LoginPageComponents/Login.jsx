@@ -61,9 +61,6 @@ export default function Login() {
       <div className="mb-2 w-full">
         <div className="flex justify-between">
           <p className="text-sm text-[#00000] mx-2">Senha</p>
-          <div className="flex justify-end">
-            <Link to={"/"} className="font-sm text-sm text-[#0077FF] transition-all duration-100 ease-in-out transform hover:font-bold">Esqueceu?</Link>
-          </div>
         </div>
         <div className="relative flex justify-center items-center">
           <input
@@ -89,12 +86,6 @@ export default function Login() {
         className="cursor-pointer w-full h-12 mt-2 rounded-xl flex justify-center items-center bg-[#FF7B00] hover:bg-[#FF3700] transition-all duration-300 ease-in-out transform hover:scale-98"
       >
         <p className="text-white font-semibold text-xl">Entrar</p>
-      </button>
-
-      {/* Login com Google */}
-      <button className="cursor-pointer w-full h-12 mt-2 rounded-lg flex justify-center items-center space-x-1 bg-[#CBEBFF] hover:bg-[#A1DBFF] transition-all duration-300 ease-in-out transform hover:scale-98">
-        <FcGoogle className="text-xl" />
-        <p className="text-[#0077FF] font-semibold text-1xl">Continuar com o Google</p>
       </button>
 
       {/* Link para registrar */}
