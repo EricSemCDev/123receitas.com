@@ -16,8 +16,6 @@
   
   ### **Front-End:**  
   - [React.JS](https://react.dev/learn)  
-  - [Vue.JS](https://vuejs.org/)  
-    - *As bibliotecas de front-end estão ambas sendo cotadas para diferentes cenários.*  
   
   ### **Database:**  
   - [PostgreSQL](https://www.postgresql.org/) 
