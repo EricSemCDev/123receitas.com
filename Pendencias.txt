@@ -1,6 +1,0 @@
-Implementar a busca por Nome de forma efetiva (Passando para a página no caso)
-        Está sendo implementado no NAV
-
-Revisão de bugs
-
-Entrega Final
