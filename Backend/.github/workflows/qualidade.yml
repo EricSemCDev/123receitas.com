@@ -1,4 +1,4 @@
-name: Auditoria de Qualidade
+name: Auditoria de Qualidade de Software
 
 on:
   push:
