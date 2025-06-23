@@ -27,8 +27,7 @@ jobs:
 
       - name: 🧪 Rodar testes com cobertura
         run: |
-          npm test -- --coverage --collectCoverageFrom='api/**/*.js'
-          mv coverage/lcov-report/lcov.info coverage/lcov.info
+          npx jest --coverage --runInBand
 
       - name: 📊 Analisar com SonarCloud
         uses: SonarSource/sonarcloud-github-action@master
