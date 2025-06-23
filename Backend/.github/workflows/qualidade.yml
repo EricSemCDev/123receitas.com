@@ -1,15 +1,16 @@
-name: Auditoria de Qualidade de Software
-# CI atualizado para forçar execução
+name: Auditoria de Qualidade
+
 on:
-  push:
-    branches:
-      - '**'
   pull_request:
     branches:
-      - '**'
+      - main
+  push:
+    branches:
+      - main
 
 jobs:
   qualidade:
+    name: Verificação de Qualidade com SonarCloud
     runs-on: ubuntu-latest
 
     steps:
@@ -25,11 +26,13 @@ jobs:
         run: npm install
 
       - name: 🧪 Rodar testes com cobertura
-        run: npm test -- --coverage
+        run: |
+          npm test -- --coverage --collectCoverageFrom='api/**/*.js'
+          mv coverage/lcov-report/lcov.info coverage/lcov.info
 
       - name: 📊 Analisar com SonarCloud
         uses: SonarSource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           projectBaseDir: .
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
