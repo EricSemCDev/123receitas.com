@@ -1,5 +1,5 @@
 name: Auditoria de Qualidade de Software
-
+# CI atualizado para forçar execução
 on:
   push:
     branches: [Testes/Auditoria]
