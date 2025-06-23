@@ -1,0 +1,33 @@
+name: Auditoria de Qualidade
+
+on:
+  push:
+    branches: [Testes/Auditoria]
+  pull_request:
+    branches: [Testes/Auditoria]
+
+jobs:
+  qualidade:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Clonar repositório
+        uses: actions/checkout@v3
+
+      - name: 🧰 Instalar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 📦 Instalar dependências
+        run: npm install
+
+      - name: 🧪 Rodar testes com cobertura
+        run: npm test -- --coverage
+
+      - name: 📊 Analisar com SonarCloud
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: .
