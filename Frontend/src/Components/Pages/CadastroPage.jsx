@@ -1,5 +1,5 @@
 // src/Components/HomePage.jsx
-import FundoSalada from "../Geral/fundoSalada";
+import FundoSalada from "../Geral/FundoSalada";
 import Cadastro from "../CadastroPageComponents/Cadastro";
 
 export default function CadastroPage() {
