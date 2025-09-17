@@ -1,4 +1,3 @@
-// src/Components/HomePage.jsx
 import FundoSalada from "../Geral/FundoSalada";
 import Login from "../LoginPageComponents/Login";
 
