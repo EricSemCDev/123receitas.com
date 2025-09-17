@@ -6,7 +6,6 @@ import LoginPage from "./Components/Pages/LoginPage";
 import BuscaReceita from "./Components/Pages/BuscaReceita"
 import ReceitaDesc from "./Components/Pages/ReceitaDesc";
 import Conta from "./Components/Pages/Conta";
-import CriarReceita from "./Components/Pages/CriarReceita";
 
 export default function App() {
   return (
@@ -18,7 +17,6 @@ export default function App() {
         <Route path="/BuscaReceita" element={<BuscaReceita/>}/>
         <Route path="/ReceitaDesc/:id" element={<ReceitaDesc/>}/>
         <Route path="/Conta" element={<Conta/>}/>
-        <Route path="/CriarReceita" element={<CriarReceita/>}/>
       </Routes>
     </Router>
   );
