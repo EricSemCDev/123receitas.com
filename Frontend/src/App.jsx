@@ -1,12 +1,12 @@
 // src/App.jsx
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import HomePage from "./Pages/HomePage";
-import CadastroPage from "./Pages/CadastroPage";
-import LoginPage from "./Pages/LoginPage";
-import BuscaReceita from "./Pages/BuscaReceita"
-import ReceitaDesc from "./Pages/ReceitaDesc";
-import Conta from "./Pages/Conta";
-import CriarReceita from "./Pages/CriarReceita";
+import HomePage from "./Components/Pages/HomePage";
+import CadastroPage from "./Components/Pages/CadastroPage";
+import LoginPage from "./Components/Pages/LoginPage";
+import BuscaReceita from "./Components/Pages/BuscaReceita"
+import ReceitaDesc from "./Components/Pages/ReceitaDesc";
+import Conta from "./Components/Pages/Conta";
+import CriarReceita from "./Components/Pages/CriarReceita";
 
 export default function App() {
   return (
